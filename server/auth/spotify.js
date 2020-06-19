@@ -1,7 +1,7 @@
 const passport = require('passport')
 const router = require('express').Router()
 const SpotifyStrategy = require('passport-spotify').Strategy
-const {User} = require('../db/models')
+const { User } = require('../db/models')
 module.exports = router
 
 if (!process.env.SPOTIFY_CLIENT_ID || !process.env.SPOTIFY_CLIENT_SECRET) {
@@ -19,10 +19,18 @@ if (!process.env.SPOTIFY_CLIENT_ID || !process.env.SPOTIFY_CLIENT_SECRET) {
     async (req, accessToken, refreshToken, expiresIn, profile, done) => {
       req.session.accessToken = accessToken
       req.session.refreshToken = refreshToken
+
+      console.log(profile)
       const spotifyId = profile.id
-      const name = profile.displayName
+      const { displayName, username, emails } = profile
       try {
-        const [user] = await User.findOrCreate({where: {name}})
+        const [user] = await User.findOrCreate({
+          where: {
+            name: displayName,
+            email: emails[0].value,
+            username
+          }
+        })
         return done(null, user)
       } catch (err) {
         done(err)
@@ -34,7 +42,7 @@ if (!process.env.SPOTIFY_CLIENT_ID || !process.env.SPOTIFY_CLIENT_SECRET) {
   router.get(
     '/',
     passport.authenticate('spotify', {
-      scope: ['playlist-modify-private']
+      scope: ['user-read-email', 'user-read-private']
     })
   )
 
