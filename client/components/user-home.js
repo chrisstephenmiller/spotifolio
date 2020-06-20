@@ -1,16 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {connect} from 'react-redux'
-
+import { connect } from 'react-redux'
 /**
  * COMPONENT
  */
 export const UserHome = props => {
-  const {email} = props
-
+  const { name, graphQL } = props
+  graphQL()
   return (
     <div>
-      <h3>Welcome, {email}</h3>
+      <h3>Welcome, {name}!</h3>
     </div>
   )
 }
@@ -19,12 +18,21 @@ export const UserHome = props => {
  * CONTAINER
  */
 const mapState = state => {
+  console.log(state)
   return {
-    email: state.user.email
+    name: state.user.name
   }
 }
 
-export default connect(mapState)(UserHome)
+const mapDispatch = dispatch => {
+  return {
+    graphQL: () => {
+      console.log('GraphQL!')
+    }
+  }
+}
+
+export default connect(mapState, mapDispatch)(UserHome)
 
 /**
  * PROP TYPES
