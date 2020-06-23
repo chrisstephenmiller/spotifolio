@@ -2,36 +2,31 @@ const { gql } = require('apollo-server-express')
 
 module.exports = gql`
   type Query {
-    getProfile: Me
+    getProfile: Profile
     getFollowedArtists: [Artist]
-    getUser(id: Int!): User
-    getUsers: [User]
-    getArtist(spotifyId: String!): Artist
+    getArtists(spotifyIds: [String!]): [Artist]
   }
 
   type Mutation {
-    addHolding(spotifyId: String): Holding
+    addHoldings(spotifyIds: [String!]): [Holding]
   }
 
   type Holding {
     id: Int!
+    userId: Int!
     spotifyId: String!
-    artist: Artist
+    artist: Artist!
     bought: String!
+    sold: String
   }
 
-  type Me {
-    id: String!
+  type Profile {
+    id: Int!
     name: String!
+    username: String!
     email: String!
     followers: Int!
     imageUrl: String!
-  }
-
-  type User {
-    id: Int!
-    email: String!
-    name: String!
   }
 
   type Artist {

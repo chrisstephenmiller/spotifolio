@@ -4,11 +4,14 @@ const db = require('../db')
 const Holding = db.define('holding', {
   spotifyId: {
     type: Sequelize.STRING,
-    unique: true,
-    allowNull: true
+    allowNull: false
   },
   info: {
-    type: Sequelize.JSONB
+    type: Sequelize.JSONB,
+    allowNull: false
+  },
+  destroyedAt: {
+    type: Sequelize.DATE
   }
 })
 

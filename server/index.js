@@ -21,10 +21,7 @@ if (process.env.NODE_ENV === 'test') {
 
 if (process.env.NODE_ENV !== 'production') require('../secrets')
 
-passport.serializeUser((user, done) => {
-  console.log(user)
-  return done(null, user.id)
-})
+passport.serializeUser((user, done) => done(null, user.id))
 
 passport.deserializeUser(async (id, done) => {
   try {

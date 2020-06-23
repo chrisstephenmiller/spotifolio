@@ -5,7 +5,7 @@ import { getProfile } from '../store'
 
 export const UserHome = props => {
   const { name, imageUrl, fetchProfile } = props
-  fetchProfile()
+  // fetchProfile()
   return (
     <div>
       <h3>Welcome, {name}!</h3>
