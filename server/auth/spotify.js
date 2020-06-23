@@ -20,15 +20,12 @@ if (!process.env.SPOTIFY_CLIENT_ID || !process.env.SPOTIFY_CLIENT_SECRET) {
       req.session.accessToken = accessToken
       req.session.refreshToken = refreshToken
 
-      console.log(profile)
-      const spotifyId = profile.id
-      const { displayName, username, emails } = profile
       try {
         const [user] = await User.findOrCreate({
           where: {
-            name: displayName,
-            email: emails[0].value,
-            username
+            name: profile.displayName,
+            email: profile.emails[0].value,
+            username: profile.username
           }
         })
         return done(null, user)
@@ -37,12 +34,13 @@ if (!process.env.SPOTIFY_CLIENT_ID || !process.env.SPOTIFY_CLIENT_SECRET) {
       }
     }
   )
+
   passport.use(strategy)
 
   router.get(
     '/',
     passport.authenticate('spotify', {
-      scope: ['user-read-email', 'user-read-private']
+      scope: ['user-read-email', 'user-follow-read']
     })
   )
 

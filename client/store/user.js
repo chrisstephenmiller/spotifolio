@@ -15,12 +15,31 @@ const defaultUser = {}
 /**
  * ACTION CREATORS
  */
-const getUser = user => ({type: GET_USER, user})
-const removeUser = () => ({type: REMOVE_USER})
+const getUser = user => ({ type: GET_USER, user })
+const removeUser = () => ({ type: REMOVE_USER })
 
 /**
  * THUNK CREATORS
  */
+
+export const getProfile = () => async dispatch => {
+  const query = `{ 
+    getProfile {
+      id
+      name
+      email
+      followers
+      imageUrl
+    }
+  }`
+  try {
+    const res = await axios.post('/graphql', { query })
+    dispatch(getUser(res.data.data.getProfile || defaultUser))
+  } catch (err) {
+    console.log(err)
+  }
+}
+
 export const me = () => async dispatch => {
   try {
     const res = await axios.get('/auth/me')
@@ -33,9 +52,9 @@ export const me = () => async dispatch => {
 export const auth = (email, password, method) => async dispatch => {
   let res
   try {
-    res = await axios.post(`/auth/${method}`, {email, password})
+    res = await axios.post(`/auth/${method}`, { email, password })
   } catch (authError) {
-    return dispatch(getUser({error: authError}))
+    return dispatch(getUser({ error: authError }))
   }
 
   try {

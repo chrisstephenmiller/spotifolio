@@ -1,43 +1,26 @@
-const { ApolloServer, gql } = require('apollo-server-express')
-const { User } = require('../db/models')
+const { ApolloServer } = require('apollo-server-express')
+const typeDefs = require('./types')
+const resolvers = require('./resolvers')
+const { Session, User } = require('../db/models')
 
-const typeDefs = gql`
-  type Query {
-    getUser(id: Int!): User
-    getUsers: [User]
-    # getArtist(id: Int!): Artist
-    # getArtists: [Artist]
+module.exports = new ApolloServer({
+  typeDefs,
+  resolvers,
+  context: ({ req }) => authContext(req)
+})
+
+const authContext = async req => {
+  const { graphql, host } = req.headers
+  if (graphql && host === 'localhost:' + process.env.PORT) {
+    const session = await Session.findByPk(graphql)
+    const data = JSON.parse(session.data)
+    return {
+      userId: data.passport.userId,
+      accessToken: data.accessToken
+    }
   }
-
-  type User {
-    id: Int!
-    email: String!
-    name: String!
-  }
-
-  #   type Artist {
-  #     id: Int!
-  #     name: String!
-  #     spotifyId: String!
-  #     followers: Int!
-  #     popularity: Int!
-  #     genres: [String!]
-  #     userId: Int!
-  #     imageUrl: String!
-  #   }
-`
-
-const resolvers = {
-  Query: {
-    getUser: (parent, { id }) => User.findByPk(id),
-    getUsers: () => User.findAll()
-    // getArtist: (parent, { id }) => Artist.
+  return {
+    userId: req.user.id,
+    accessToken: req.session.accessToken
   }
 }
-
-const context = expressContext => {
-  const { req, res } = expressContext
-  console.log(req, res)
-}
-
-module.exports = new ApolloServer({ typeDefs, resolvers, context })

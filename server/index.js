@@ -6,7 +6,7 @@ const session = require('express-session')
 const passport = require('passport')
 const SequelizeStore = require('connect-session-sequelize')(session.Store)
 const db = require('./db')
-const sessionStore = new SequelizeStore({ db })
+const sessionStore = new SequelizeStore({ db, table: 'session' })
 const graphql = require('./graphql')
 const PORT = process.env.PORT || 8080
 const app = express()
@@ -21,7 +21,10 @@ if (process.env.NODE_ENV === 'test') {
 
 if (process.env.NODE_ENV !== 'production') require('../secrets')
 
-passport.serializeUser((user, done) => done(null, user.id))
+passport.serializeUser((user, done) => {
+  console.log(user)
+  return done(null, user.id)
+})
 
 passport.deserializeUser(async (id, done) => {
   try {
@@ -48,6 +51,9 @@ const createApp = () => {
       saveUninitialized: false
     })
   )
+
+  sessionStore.sync()
+
   app.use(passport.initialize())
   app.use(passport.session())
 

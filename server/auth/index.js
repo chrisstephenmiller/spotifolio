@@ -1,6 +1,5 @@
 const router = require('express').Router()
 const User = require('../db/models/user')
-module.exports = router
 
 router.post('/logout', (req, res) => {
   req.logout()
@@ -13,3 +12,5 @@ router.get('/me', (req, res) => {
 })
 
 router.use('/spotify', require('./spotify'))
+
+module.exports = router

@@ -1,15 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-/**
- * COMPONENT
- */
+import { getProfile } from '../store'
+
 export const UserHome = props => {
-  const { name, graphQL } = props
-  graphQL()
+  const { name, imageUrl, fetchProfile } = props
+  fetchProfile()
   return (
     <div>
       <h3>Welcome, {name}!</h3>
+      <img src={imageUrl} style={{ height: 100, width: 100 }} />
     </div>
   )
 }
@@ -18,16 +18,16 @@ export const UserHome = props => {
  * CONTAINER
  */
 const mapState = state => {
-  console.log(state)
   return {
-    name: state.user.name
+    name: state.user.name,
+    imageUrl: state.user.imageUrl
   }
 }
 
 const mapDispatch = dispatch => {
   return {
-    graphQL: () => {
-      console.log('GraphQL!')
+    fetchProfile() {
+      dispatch(getProfile())
     }
   }
 }
