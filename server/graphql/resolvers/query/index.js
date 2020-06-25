@@ -1,11 +1,9 @@
-const spotifyApi = require('../../../spotify')
-
 const getProfile = require('./getProfile')
-const getArtists = require('./getArtists')
+const getAssets = require('./getAssets')
 const getFollowedArtists = require('./getFollowedArtists')
 
 module.exports = {
   getProfile,
-  getArtists,
+  getAssets,
   getFollowedArtists
 }

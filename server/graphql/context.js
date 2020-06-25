@@ -12,10 +12,14 @@ const userAuth = req => ({
 })
 
 const playground = async graphql => {
-  const session = await Session.findByPk(graphql)
-  const data = JSON.parse(session.data)
-  return {
-    userId: data.passport.user,
-    accessToken: data.accessToken
+  try {
+    const session = await Session.findByPk(graphql)
+    const data = JSON.parse(session.data)
+    return {
+      userId: data.passport.user,
+      accessToken: data.accessToken
+    }
+  } catch (err) {
+    console.log(err, '<<< BAD SESSION >>>')
   }
 }

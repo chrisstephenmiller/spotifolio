@@ -6,7 +6,7 @@ const Holding = db.define('holding', {
     type: Sequelize.STRING,
     allowNull: false
   },
-  info: {
+  asset: {
     type: Sequelize.JSONB,
     allowNull: false
   },

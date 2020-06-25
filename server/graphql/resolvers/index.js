@@ -1,4 +1,10 @@
 const Query = require('./query')
 const Mutation = require('./mutation')
 
-module.exports = { Query, Mutation }
+const Asset = {
+  __resolveType(obj, context, info) {
+    return obj.genres ? 'Artist' : 'Track'
+  }
+}
+
+module.exports = { Asset, Query, Mutation }

@@ -1,19 +1,23 @@
-const { getArtists } = require('../query')
-
 const { Holding } = require('../../../db/models')
+const { getAssets } = require('../query')
 const { holdingMap } = require('../map')
 
 module.exports = async (parent, { spotifyIds }, { userId, accessToken }) => {
-  const artists = await getArtists(null, { spotifyIds }, { accessToken })
-  const holdings = await Holding.bulkCreate(
-    artists.map(artist => ({
-      userId,
-      spotifyId: artist.spotifyId,
-      info: artist
-    }))
-  )
-  return holdings.map((holding, i) => ({
+  const assets = await getAssets(null, { spotifyIds }, { accessToken })
+  const holdings = await userBroker(userId, assets)
+  return holdings.map(([holding], i) => ({
     ...holdingMap(holding),
-    artist: artists[i]
+    asset: assets[i]
   }))
 }
+
+const userBroker = (userId, assets) =>
+  Promise.all(
+    assets.map(asset => {
+      const { spotifyId } = asset
+      return Holding.findOrCreate({
+        where: { userId, spotifyId, destroyedAt: null },
+        defaults: { userId, spotifyId, asset }
+      })
+    })
+  )
