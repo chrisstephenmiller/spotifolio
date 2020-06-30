@@ -1,11 +1,13 @@
-const artistMap = artist => ({
-  name: artist.name,
-  spotifyId: artist.id,
-  popularity: artist.popularity,
-  genres: artist.genres,
-  followers: artist.followers.total,
-  imageUrl: artist.images[0].url
-})
+const artistMap = artist => {
+  return {
+    name: artist.name,
+    spotifyId: artist.id,
+    popularity: artist.popularity,
+    genres: artist.genres,
+    followers: artist.followers.total,
+    images: artist.images
+  }
+}
 
 const trackMap = track => {
   return {

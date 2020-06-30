@@ -1,9 +1,8 @@
 const router = require('express').Router()
-const User = require('../db/models/user')
 
-router.post('/logout', (req, res) => {
-  req.logout()
-  req.session.destroy()
+router.post('/logout', async (req, res) => {
+  req.logOut()
+  // req.session.destroy()
   res.redirect('/')
 })
 

@@ -1,11 +1,9 @@
-const spotifyApi = require('../../../spotify')
 const { profileMap } = require('../map')
 
-module.exports = async (parent, args, { userId, accessToken }) => {
-  const spotify = await spotifyApi(accessToken)
-  const { body } = await spotify.getMe()
+module.exports = async (parent, args, req) => {
+  const { body } = await req.spotify.getMe()
   return {
-    id: userId,
+    id: req.user.id,
     ...profileMap(body)
   }
 }

@@ -4,6 +4,7 @@ module.exports = gql`
   type Query {
     getProfile: Profile
     getFollowedArtists: [Artist]
+    getPlaylist: [Track]
     getAssets(spotifyIds: [String!]): [Asset]
   }
 
@@ -28,7 +29,7 @@ module.exports = gql`
     followers: Int!
     popularity: Int!
     genres: [String!]
-    imageUrl: String!
+    images: [Image!]
   }
 
   type Track {
@@ -52,5 +53,11 @@ module.exports = gql`
     email: String!
     followers: Int!
     imageUrl: String!
+  }
+
+  type Image {
+    height: Int!
+    width: Int!
+    url: String!
   }
 `

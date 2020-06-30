@@ -19,6 +19,7 @@ if (!process.env.SPOTIFY_CLIENT_ID || !process.env.SPOTIFY_CLIENT_SECRET) {
     async (req, accessToken, refreshToken, expiresIn, profile, done) => {
       req.session.accessToken = accessToken
       req.session.refreshToken = refreshToken
+      req.session.expiresAt = expiresIn * 1000 + Date.now()
 
       try {
         const [user] = await User.findOrCreate({

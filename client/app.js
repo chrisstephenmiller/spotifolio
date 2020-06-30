@@ -1,13 +1,14 @@
 import React from 'react'
-
-import {Navbar} from './components'
+import { Navbar } from './components'
 import Routes from './routes'
+import { useAuth } from './auth'
 
 const App = () => {
+  const { user } = useAuth()
   return (
     <div>
-      <Navbar />
-      <Routes />
+      <Navbar user={user} />
+      <Routes user={user} />
     </div>
   )
 }

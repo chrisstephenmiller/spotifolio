@@ -11,6 +11,7 @@ const graphql = require('./graphql')
 const PORT = process.env.PORT || 8080
 const app = express()
 const socketio = require('socket.io')
+const spotifyApi = require('./auth/client')
 module.exports = app
 
 // This is a global Mocha hook, used for resource cleanup.
@@ -55,6 +56,11 @@ const createApp = () => {
   app.use(passport.session())
 
   app.use('/auth', require('./auth'))
+
+  app.use(async (req, res, next) => {
+    req.spotify = await spotifyApi(req)
+    next()
+  })
 
   graphql.applyMiddleware({ app })
 
