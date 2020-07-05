@@ -1,27 +1,34 @@
 const SpotifyWebApi = require('spotify-web-api-node')
 const { Session } = require('../db/models')
 
-module.exports = async ({ session, headers }) => {
+module.exports = ({ session, headers }) => {
   const spotifyWebApi = new SpotifyWebApi({
     clientId: process.env.SPOTIFY_CLIENT_ID,
     clientSecret: process.env.SPOTIFY_CLIENT_SECRET
   })
 
-  const validUser = session => session.accessToken
+  const refreshToken = async data => {
+    spotifyWebApi.setRefreshToken(data.refreshToken)
+    const { body } = await spotifyWebApi.refreshAccessToken()
+    data.accessToken = body.access_token
+    data.expiresAt = body.expires_in * 1000 + Date.now()
+    return data
+  }
+  const validUser = userSession => userSession.accessToken
 
-  const getUserToken = async session => {
-    if (session.expiresAt < Date.now()) await refreshToken(session)
-    return session.accessToken
+  const getUserToken = async userSession => {
+    if (userSession.expiresAt < Date.now()) await refreshToken(userSession)
+    return userSession.accessToken
   }
 
-  const validLocalDev = headers => {
-    const { graphql, host } = headers
+  const validLocalDev = localHeaders => {
+    const { graphql, host } = localHeaders
     const localDev = host === 'localhost:' + process.env.PORT
     return localDev && graphql
   }
 
-  const getGraphQLToken = async headers => {
-    const adminSession = await Session.findByPk(headers.graphql)
+  const getGraphQLToken = async localHeaders => {
+    const adminSession = await Session.findByPk(localHeaders.graphql)
     if (!adminSession) console.log('<<< OLD SESSION ID >>>')
     const data = JSON.parse(adminSession.data)
 
@@ -36,28 +43,22 @@ module.exports = async ({ session, headers }) => {
   }
 
   const getAppToken = async () => {
-    const appToken = await spotifyWebApi.clientCredentialsGrant()
-    return appToken.body.access_token
+    // TODO: access_token be peristed, used through expiration period
+    const { body } = await spotifyWebApi.clientCredentialsGrant()
+    return body.access_token
   }
 
-  const refreshToken = async data => {
-    spotifyWebApi.setRefreshToken(data.refreshToken)
-    const { body } = await spotifyWebApi.refreshAccessToken()
-    data.accessToken = body.access_token
-    data.expiresAt = body.expires_in * 1000 + Date.now()
-    return data
-  }
-
-  try {
-    const accessToken = validUser(session)
-      ? await getUserToken(session)
-      : validLocalDev(headers)
-        ? await getGraphQLToken(headers)
-        : await getAppToken()
+  return async appAuth => {
+    const accessToken =
+      appAuth === null // null passed for scopeless api (rate limiting)
+        ? await getAppToken() // scopeless, no auth needed
+        : validUser(session) // auth needed, confirm valid user
+          ? await getUserToken(session) // confirm userToken is current, refresh if necessary
+          : validLocalDev(headers) // no valid user, confirm local dev
+            ? await getGraphQLToken(headers) // confirm graphqlToken is current, refresh if necessary
+            : await getAppToken() // otherwise, use app credentials as fallback
 
     spotifyWebApi.setAccessToken(accessToken)
     return spotifyWebApi
-  } catch (err) {
-    console.log(err)
   }
 }

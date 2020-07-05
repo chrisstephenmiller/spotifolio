@@ -2,7 +2,7 @@ import React from 'react'
 import { useQuery } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
 
-const query = gql`
+const getProfile = gql`
   {
     getProfile {
       name
@@ -11,8 +11,8 @@ const query = gql`
   }
 `
 
-export const UserHome = ({ user }) => {
-  const { loading, error, data } = useQuery(query)
+export const UserHome = () => {
+  const { loading, error, data } = useQuery(getProfile)
   if (loading || error) return null
   return (
     <div>

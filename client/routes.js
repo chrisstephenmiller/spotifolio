@@ -1,9 +1,10 @@
 import React from 'react'
 import { withRouter, Route, Switch } from 'react-router-dom'
 import { UserHome } from './components'
+import { useAuth } from './auth'
 
-const Routes = ({ user }) => {
-  const notLoggedin = () => <p>Not logged in.</p>
+const Routes = () => {
+  const { user } = useAuth()
   return (
     <Switch>
       {/* Routes placed here are available to all visitors */}
@@ -14,7 +15,7 @@ const Routes = ({ user }) => {
         </Switch>
       )}
       {/* Displays our Login component as a fallback */}
-      <Route component={notLoggedin} />
+      <Route component={() => <p>Not logged in.</p>} />
     </Switch>
   )
 }

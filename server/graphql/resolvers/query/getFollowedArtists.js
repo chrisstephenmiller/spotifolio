@@ -1,7 +1,11 @@
-const { artistMap } = require('../map')
-
 module.exports = async (parent, args, req) => {
   const { body } = await req.spotify.getFollowedArtists({ limit: 50 })
-  console.log(body.artists.items.length)
-  return body.artists.items.map(artistMap)
+  return body.artists.items.map(artist => ({
+    name: artist.name,
+    spotifyId: artist.id,
+    popularity: artist.popularity,
+    genres: artist.genres,
+    followers: artist.followers.total,
+    images: artist.images
+  }))
 }

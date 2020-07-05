@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../auth'
 
-const Navbar = ({ user }) => {
-  const { logout } = useAuth()
+const Navbar = () => {
+  const { user, logout } = useAuth()
 
   return (
     <div>
@@ -12,7 +12,6 @@ const Navbar = ({ user }) => {
         {user ? (
           <div>
             {/* The navbar will show these links after you log in */}
-            <Link to="/home">Home</Link>
             <a href="/" onClick={logout}>
               Logout
             </a>

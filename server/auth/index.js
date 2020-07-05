@@ -1,8 +1,8 @@
 const router = require('express').Router()
 
-router.post('/logout', async (req, res) => {
+router.post('/logout', (req, res) => {
   req.logOut()
-  // req.session.destroy()
+  // req.session.destroy() // destroy sessions on logout
   res.redirect('/')
 })
 

@@ -4,8 +4,11 @@ module.exports = gql`
   type Query {
     getProfile: Profile
     getFollowedArtists: [Artist]
-    getPlaylist: [Track]
+    getPlaylist(playlistId: String!): Playlist
+    getPlaylists: [Playlist]
     getAssets(spotifyIds: [String!]): [Asset]
+    getArtists(artistIds: [String!]): [Artist!]
+    getTracks(trackIds: [String!]): [Track!]
   }
 
   type Mutation {
@@ -36,14 +39,16 @@ module.exports = gql`
     spotifyId: String!
     name: String!
     popularity: Int!
-    artists: [TrackArtist!]
+    artists: [Artist!]
     # album: Album!
   }
 
-  type TrackArtist {
-    spotifyId: String!
+  type Playlist {
     name: String!
-    imageUrl: String!
+    spotifyId: String!
+    description: String
+    images: [Image]
+    tracks: [Track]
   }
 
   type Profile {
