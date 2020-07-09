@@ -11,7 +11,7 @@ const Routes = () => {
       {/* <Route path="/" component={notLoggedin} /> */}
       {user && (
         <Switch>
-          <Route path="/" component={UserHome} />
+          <Route path="/" render={() => <UserHome user={user} />} />
         </Switch>
       )}
       {/* Displays our Login component as a fallback */}

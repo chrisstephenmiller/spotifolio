@@ -3,7 +3,7 @@ const Mutation = require('./mutation')
 
 const Asset = {
   __resolveType(obj, context, info) {
-    return obj.genres ? 'Artist' : 'Track'
+    return obj.tracks ? 'Album' : obj.genres ? 'Artist' : 'Track'
   }
 }
 

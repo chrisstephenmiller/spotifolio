@@ -41,7 +41,7 @@ if (!process.env.SPOTIFY_CLIENT_ID || !process.env.SPOTIFY_CLIENT_SECRET) {
   router.get(
     '/',
     passport.authenticate('spotify', {
-      scope: ['user-read-email', 'user-follow-read', 'user-read-private']
+      scope: ['user-read-email', 'user-follow-read', 'user-read-private', 'playlist-read-private']
     })
   )
 

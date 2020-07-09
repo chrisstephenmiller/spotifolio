@@ -4,14 +4,14 @@ import { useAuth } from '../auth'
 
 const Navbar = () => {
   const { user, logout } = useAuth()
-
   return (
     <div>
       <h1>SPOTIFOLIO</h1>
       <nav>
         {user ? (
-          <div>
+          <div style={{ display: 'inline-flex' }}>
             {/* The navbar will show these links after you log in */}
+            {/* <img src={data.getProfile.imageUrl} style={{ height: 100, width: 100 }} /> */}
             <a href="/" onClick={logout}>
               Logout
             </a>

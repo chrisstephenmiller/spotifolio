@@ -1,14 +1,16 @@
-const { artistMap } = require('../map')
-const { trackMap } = require('../map')
+const getArtists = require('./getArtists')
+const getTracks = require('./getTracks')
+const getAlbums = require('./getAlbums')
 
-module.exports = async (parent, { spotifyIds }, req) => {
-  const spotifyApi = await req.spotify(null)
-  const assets = await Promise.all([
-    spotifyApi.getArtists({ artistIds: spotifyIds }),
-    spotifyApi.getTracks({ trackIds: spotifyIds })
+module.exports = async (parent, { artistIds, trackIds, albumIds }, req) => {
+  const [artists, tracks, albums] = await Promise.all([
+    getArtists(parent, { artistIds }, req),
+    getTracks(parent, { trackIds }, req),
+    getAlbums(parent, { albumIds }, req)
   ])
-  return [
-    ...assets[0].body.artists.filter(Boolean).map(artistMap),
-    ...assets[1].body.tracks.filter(Boolean).map(trackMap)
-  ]
+  return {
+    artists,
+    tracks,
+    albums
+  }
 }
