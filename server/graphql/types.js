@@ -10,29 +10,21 @@ module.exports = gql`
     getFollowedArtists: [Artist]
     getUserPlaylists: [UserPlaylist]
     getAssets(artistIds: [String] = [], trackIds: [String] = [], albumIds: [String] = []): Assets
+    getHoldings(holdingIds: [Int], spotifyIds: [String]): [Holding]
   }
 
   type Mutation {
     addHoldings(artistIds: [String] = [], trackIds: [String] = [], albumIds: [String] = []): [Holding]
   }
 
-  enum AssetType {
-    ARTIST
-    TRACK
-    ALBUM
-  }
-
   type Holding {
     id: Int!
     userId: Int!
     spotifyId: String!
-    type: [AssetType]!
     asset: Asset!
     bought: String!
     sold: String
   }
-
-  union Asset = Artist | Track | Album
 
   type Assets {
     artists: [Artist]!
@@ -40,7 +32,14 @@ module.exports = gql`
     albums: [Album]!
   }
 
-  type Artist {
+  interface Asset {
+    spotifyId: String!
+    name: String!
+    popularity: Int!
+    images: [Image]
+  }
+
+  type Artist implements Asset {
     spotifyId: String!
     name: String!
     followers: Int!
@@ -49,7 +48,8 @@ module.exports = gql`
     images: [Image]!
   }
 
-  type Track {
+  type Track implements Asset {
+    images: [Image]!
     spotifyId: String!
     name: String!
     popularity: Int!
@@ -57,7 +57,7 @@ module.exports = gql`
     album: TrackAlbum!
   }
 
-  type Album {
+  type Album implements Asset {
     name: String!
     artists: [Artist]
     spotifyId: String!

@@ -16,7 +16,8 @@ const trackArtistsMap = (track, trackArtists) => {
     album: trackAlbumMap(album),
     spotifyId: id,
     name,
-    popularity
+    popularity,
+    images: album.images
   }
 }
 

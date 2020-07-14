@@ -2,7 +2,7 @@ const Query = require('./query')
 const Mutation = require('./mutation')
 
 const Asset = {
-  __resolveType(obj, context, info) {
+  __resolveType(obj) {
     return obj.tracks ? 'Album' : obj.genres ? 'Artist' : 'Track'
   }
 }
