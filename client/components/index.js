@@ -5,3 +5,5 @@
  */
 export { default as Navbar } from './navbar'
 export { default as UserHome } from './user-home'
+export { default as FollowedArtists } from './followed-artists'
+export { default as Holdings } from './holdings'

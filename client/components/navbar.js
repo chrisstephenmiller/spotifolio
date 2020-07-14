@@ -12,6 +12,9 @@ const Navbar = () => {
           <div style={{ display: 'inline-flex' }}>
             {/* The navbar will show these links after you log in */}
             {/* <img src={data.getProfile.imageUrl} style={{ height: 100, width: 100 }} /> */}
+            <Link to="/">Home</Link>
+            <Link to="/artists">Artists</Link>
+            <Link to="/holdings">Holdings</Link>
             <a href="/" onClick={logout}>
               Logout
             </a>

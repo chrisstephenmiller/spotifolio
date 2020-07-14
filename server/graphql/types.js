@@ -22,7 +22,7 @@ module.exports = gql`
     userId: Int!
     spotifyId: String!
     asset: Asset!
-    bought: String!
+    createdAt: String!
     sold: String
   }
 
