@@ -9,7 +9,7 @@ module.exports = gql`
     getProfile: Profile
     getFollowedArtists: [Artist]
     getUserPlaylists: [UserPlaylist]
-    getAssets(artistIds: [String] = [], trackIds: [String] = [], albumIds: [String] = []): Assets
+    getAssets(artistIds: [String] = [], trackIds: [String] = [], albumIds: [String] = []): [Asset]
     getHoldings(holdingIds: [Int], spotifyIds: [String]): [Holding]
   }
 
@@ -24,12 +24,6 @@ module.exports = gql`
     asset: Asset!
     createdAt: String!
     sold: String
-  }
-
-  type Assets {
-    artists: [Artist]!
-    tracks: [Track]!
-    albums: [Album]!
   }
 
   interface Asset {

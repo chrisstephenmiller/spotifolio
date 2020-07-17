@@ -8,9 +8,5 @@ module.exports = async (parent, { artistIds, trackIds, albumIds }, req) => {
     getTracks(parent, { trackIds }, req),
     getAlbums(parent, { albumIds }, req)
   ])
-  return {
-    artists,
-    tracks,
-    albums
-  }
+  return [...artists, ...tracks, ...albums]
 }
