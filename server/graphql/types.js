@@ -9,6 +9,7 @@ module.exports = gql`
     getProfile: Profile
     getFollowedArtists: [Artist]
     getUserPlaylists: [UserPlaylist]
+    getSavedTracks: [Track]
     getAssets(artistIds: [String] = [], trackIds: [String] = [], albumIds: [String] = []): [Asset]
     getHoldings(holdingIds: [Int], spotifyIds: [String]): [Holding]
   }

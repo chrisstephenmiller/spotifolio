@@ -11,6 +11,11 @@ const getAssets = gql`
       popularity
       spotifyId
     }
+    getSavedTracks {
+      name
+      popularity
+      spotifyId
+    }
   }
 `
 const getHoldings = gql`
@@ -49,19 +54,14 @@ const Broker = ({ user }) => {
 
   const holdings = holdingsData.getHoldings
 
+  const FollowedAsset = assets => (
+    <FollowedAssets user={user} assets={assets} holdings={holdings} addHolding={addHolding} />
+  )
+
   return (
     <Switch>
-      <Route
-        path="/artists"
-        render={() => (
-          <FollowedAssets
-            user={user}
-            assets={assetsData.getFollowedArtists}
-            holdings={holdings}
-            addHolding={addHolding}
-          />
-        )}
-      />
+      <Route path="/artists" render={() => FollowedAsset(assetsData.getFollowedArtists)} />
+      <Route path="/tracks" render={() => FollowedAsset(assetsData.getSavedTracks)} />
       <Route path="/holdings" render={() => <Holdings user={user} holdings={holdings} />} />
     </Switch>
   )

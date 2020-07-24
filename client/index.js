@@ -8,7 +8,7 @@ import history from './history'
 import App from './app'
 import './socket'
 
-const client = new ApolloClient({ uri: 'http://localhost:8080/graphql' })
+const client = new ApolloClient()
 
 ReactDOM.render(
   <ApolloProvider client={client}>

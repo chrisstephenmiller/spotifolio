@@ -24,8 +24,7 @@ const getAssetQueryVariables = holdings => {
 const getAssets = holdings => {
   const variables = getAssetQueryVariables(holdings)
   const { loading, error, data } = useQuery(assetsQuery, { variables })
-  const assetDictEntries = data.getAssets.map(asset => [asset.spotifyId, asset])
-  return loading || error ? null : Object.fromEntries(assetDictEntries)
+  return loading || error ? null : Object.fromEntries(data.getAssets.map(asset => [asset.spotifyId, asset]))
 }
 
 export const Holdings = ({ holdings }) => {
@@ -35,14 +34,17 @@ export const Holdings = ({ holdings }) => {
       <ol>
         {holdings.map(holding => {
           const asset = assets[holding.spotifyId]
+          const boughtAt = new Date(+holding.createdAt).toLocaleDateString()
+          const delta = holding.asset.popularity < asset.popularity ? 'green' : 'red'
           return (
-            <p key={holding.spotifyId} style={{ display: 'flex', flexDirection: 'column' }}>
+            <p key={holding.spotifyId} style={{ display: 'flex', flexDirection: 'column', color: delta }}>
               <span>
                 {holding.asset.name} - {holding.asset.__typename}
               </span>
-              <span>- Bought At: {Date(holding.createdAt)}</span>
+              <span>- Bought At: {boughtAt}</span>
               <span>- Held Popularity: {holding.asset.popularity}</span>
               <span>- Current Popularity: {asset.popularity}</span>
+              <span>- Id: {holding.spotifyId}</span>
             </p>
           )
         })}

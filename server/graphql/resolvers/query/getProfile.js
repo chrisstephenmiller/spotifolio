@@ -12,6 +12,5 @@ const profileMap = profile => {
 module.exports = async (parent, args, req) => {
   const spotifyApi = await req.spotify()
   const { body } = await spotifyApi.getMe()
-  console.log(body)
   return profileMap(body)
 }

@@ -10,9 +10,9 @@ const userPlaylistsMap = playlist => {
   }
 }
 
-const remainingPlaylists = playlists => {
-  const { offset, total } = playlists
-  return offset + playlists.length < total
+const remainingItems = items => {
+  const { offset, total } = items
+  return offset + items.length < total
 }
 
 module.exports = async (parent, args, req) => {
@@ -22,10 +22,10 @@ module.exports = async (parent, args, req) => {
   const userPlaylists = await spotifyApi.getUserPlaylists({ limit })
   const playlists = userPlaylists.body.items
 
-  while (remainingPlaylists(playlists)) {
+  while (remainingItems(playlists)) {
     const offset = (playlists.offset += limit)
-    const { body } = await spotifyApi.getUserPlaylists({ limit: 50, offset })
-    playlists.items.push(...body.items)
+    const { body } = await spotifyApi.getUserPlaylists({ limit, offset })
+    playlists.push(...body.items)
   }
 
   return playlists.map(userPlaylistsMap)

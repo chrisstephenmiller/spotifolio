@@ -14,6 +14,7 @@ const Navbar = () => {
             {/* <img src={data.getProfile.imageUrl} style={{ height: 100, width: 100 }} /> */}
             <Link to="/home">Home</Link>
             <Link to="/artists">Artists</Link>
+            <Link to="/tracks">Tracks</Link>
             <Link to="/holdings">Holdings</Link>
             <a href="/" onClick={logout}>
               Logout

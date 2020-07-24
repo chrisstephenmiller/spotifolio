@@ -10,7 +10,7 @@ if (!process.env.SPOTIFY_CLIENT_ID || !process.env.SPOTIFY_CLIENT_SECRET) {
   const spotifyConfig = {
     clientID: process.env.SPOTIFY_CLIENT_ID,
     clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
-    callbackURL: process.env.SPOTIFY_REDIRECT_URI,
+    callbackURL: process.env.APP_SERVER + process.env.SPOTIFY_REDIRECT_URI,
     passReqToCallback: true
   }
 
@@ -41,7 +41,7 @@ if (!process.env.SPOTIFY_CLIENT_ID || !process.env.SPOTIFY_CLIENT_SECRET) {
   router.get(
     '/',
     passport.authenticate('spotify', {
-      scope: ['user-read-email', 'user-follow-read', 'user-read-private', 'playlist-read-private']
+      scope: ['user-read-email', 'user-follow-read', 'user-read-private', 'playlist-read-private', 'user-library-read']
     })
   )
 
