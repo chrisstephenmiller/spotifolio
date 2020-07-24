@@ -10,7 +10,6 @@ const sessionStore = new SequelizeStore({ db, table: 'session' })
 const graphql = require('./graphql')
 const PORT = process.env.PORT || 8080
 const app = express()
-const socketio = require('socket.io')
 module.exports = app
 
 // This is a global Mocha hook, used for resource cleanup.
@@ -81,12 +80,7 @@ const createApp = () => {
   })
 }
 
-const startListening = () => {
-  const server = app.listen(PORT, () => console.log(`Mixing it up on port ${PORT}`))
-
-  const io = socketio(server)
-  require('./socket')(io)
-}
+const startListening = () => app.listen(PORT, () => console.log(`Mixing it up on port ${PORT}`))
 
 const syncDb = () => db.sync({ force: false })
 

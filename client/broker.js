@@ -1,8 +1,7 @@
 import React from 'react'
 import { withRouter, Route, Switch } from 'react-router-dom'
 import { FollowedAssets, Holdings } from './components'
-import { useQuery, useMutation } from '@apollo/react-hooks'
-import { gql } from 'apollo-boost'
+import { useQuery, useMutation, gql } from '@apollo/client'
 
 const getAssets = gql`
   query {
