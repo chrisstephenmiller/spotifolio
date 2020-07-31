@@ -88,6 +88,7 @@ const HoldingTable = props => {
 
   const handleRowsPerPageChange = event => {
     setRowsPerPage(event.target.value)
+    setPage(0)
   }
 
   return (
@@ -115,7 +116,7 @@ const HoldingTable = props => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {holdings.slice(0, rowsPerPage).map(holding => {
+                {holdings.slice(page * rowsPerPage, (page + 1) * rowsPerPage).map(holding => {
                   const performance = holding.value.popularity - holding.asset.popularity
                   return (
                     <TableRow hover key={holding.id} selected={selectedHoldings.indexOf(holding.id) !== -1}>
@@ -130,7 +131,7 @@ const HoldingTable = props => {
                       <TableCell>
                         <div className={classes.nameContainer}>
                           <Avatar className={classes.avatar} src={holding.asset.images.slice(-1)[0].url}>
-                            {holding.asset.name.split(' ').map(([w]) => w)}
+                            {holding.asset.name.split(' ').map(([i]) => i)}
                           </Avatar>
                           <Typography variant="body1">{holding.asset.name}</Typography>
                         </div>

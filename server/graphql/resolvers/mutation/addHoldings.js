@@ -13,7 +13,7 @@ const makeHolding = (userId, asset) => {
 const userBroker = (userId, assets) => Promise.all(assets.map(asset => makeHolding(userId, asset)))
 
 module.exports = async (parent, { artistIds, trackIds, albumIds }, req) => {
-  const assets = await getAssets(null, { artistIds, trackIds, albumIds }, req)
+  const assets = await getAssets(parent, { artistIds, trackIds, albumIds }, req)
   const holdings = await userBroker(req.user.id, assets)
   return holdings.map((holding, index) => {
     return {
