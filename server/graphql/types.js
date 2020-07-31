@@ -10,8 +10,8 @@ module.exports = gql`
     getFollowedArtists: [Artist]
     getUserPlaylists: [UserPlaylist]
     getSavedTracks: [Track]
-    getAssets(artistIds: [String] = [], trackIds: [String] = [], albumIds: [String] = []): [Asset]
     getHoldings(holdingIds: [Int], spotifyIds: [String]): [Holding]
+    getAssets(artistIds: [String] = [], trackIds: [String] = [], albumIds: [String] = []): [Asset]
   }
 
   type Mutation {
@@ -22,9 +22,10 @@ module.exports = gql`
     id: Int!
     userId: Int!
     spotifyId: String!
-    asset: Asset!
     createdAt: String!
-    sold: String
+    asset: Asset!
+    destroyedAt: String
+    value: Asset
   }
 
   interface Asset {

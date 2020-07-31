@@ -10,6 +10,9 @@ const Holding = db.define('holding', {
     type: Sequelize.JSONB,
     allowNull: false
   },
+  value: {
+    type: Sequelize.JSONB
+  },
   destroyedAt: {
     type: Sequelize.DATE
   }

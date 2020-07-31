@@ -109,40 +109,39 @@ const HoldingTable = props => {
                   <TableCell>Name</TableCell>
                   <TableCell>Type</TableCell>
                   <TableCell>Popularity</TableCell>
-                  <TableCell>Change</TableCell>
+                  <TableCell>Performance</TableCell>
                   <TableCell>Bought</TableCell>
+                  <TableCell>Sold</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {holdings.slice(0, rowsPerPage).map(holding => (
-                  <TableRow
-                    className={classes.tableRow}
-                    hover
-                    key={holding.id}
-                    selected={selectedHoldings.indexOf(holding.id) !== -1}
-                  >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        checked={selectedHoldings.indexOf(holding.id) !== -1}
-                        color="primary"
-                        onChange={event => handleSelectOne(event, holding.id)}
-                        value="true"
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <div className={classes.nameContainer}>
-                        <Avatar className={classes.avatar} src={holding.asset.images[2].url}>
-                          {holding.asset.name.split(' ').map(([w]) => w)}
-                        </Avatar>
-                        <Typography variant="body1">{holding.asset.name}</Typography>
-                      </div>
-                    </TableCell>
-                    <TableCell>{holding.asset.__typename}</TableCell>
-                    <TableCell>{holding.asset.popularity}</TableCell>
-                    <TableCell>{holding.phone}</TableCell>
-                    <TableCell>{moment(+holding.createdAt).format('M/DD/YYYY')}</TableCell>
-                  </TableRow>
-                ))}
+                {holdings.slice(0, rowsPerPage).map(holding => {
+                  const performance = holding.value.popularity - holding.asset.popularity
+                  return (
+                    <TableRow hover key={holding.id} selected={selectedHoldings.indexOf(holding.id) !== -1}>
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          checked={selectedHoldings.indexOf(holding.id) !== -1}
+                          color="primary"
+                          onChange={event => handleSelectOne(event, holding.id)}
+                          value="true"
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <div className={classes.nameContainer}>
+                          <Avatar className={classes.avatar} src={holding.asset.images.slice(-1)[0].url}>
+                            {holding.asset.name.split(' ').map(([w]) => w)}
+                          </Avatar>
+                          <Typography variant="body1">{holding.asset.name}</Typography>
+                        </div>
+                      </TableCell>
+                      <TableCell>{holding.asset.__typename}</TableCell>
+                      <TableCell>{holding.asset.popularity}</TableCell>
+                      <TableCell>{performance}</TableCell>
+                      <TableCell>{moment(+holding.createdAt).format('M/DD/YYYY')}</TableCell>
+                    </TableRow>
+                  )
+                })}
               </TableBody>
             </Table>
           </div>

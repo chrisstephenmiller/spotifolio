@@ -14,5 +14,5 @@ const getProfileQuery = gql`
 
 export const getProfile = () => {
   const { data } = useQuery(getProfileQuery)
-  return data ? { ...data.getProfile } : {}
+  return data ? data.getProfile : {}
 }

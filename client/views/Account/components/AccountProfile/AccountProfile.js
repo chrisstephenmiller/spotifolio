@@ -4,8 +4,6 @@ import clsx from 'clsx'
 import { makeStyles } from '@material-ui/styles'
 import { Card, CardContent, Avatar, Typography } from '@material-ui/core'
 
-import { getProfile } from 'gqlRequests'
-
 const useStyles = makeStyles(() => ({
   root: {},
   details: {
@@ -21,10 +19,9 @@ const useStyles = makeStyles(() => ({
 }))
 
 const AccountProfile = props => {
-  const { className, ...rest } = props
+  const { profile, className, ...rest } = props
 
   const classes = useStyles()
-  const profile = getProfile()
 
   const ProfileInfo = ({ children }) => (
     <Typography color="textSecondary" variant="body1">
