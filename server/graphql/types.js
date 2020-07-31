@@ -102,6 +102,6 @@ module.exports = gql`
     username: String!
     email: String!
     followers: Int!
-    images: [Image]!
+    imageUrl: String!
   }
 `

@@ -5,20 +5,23 @@ const client = new ApolloClient({ uri: '/graphql', cache: new InMemoryCache() })
 
 import { ProvideAuth } from './auth'
 
+import { ThemeProvider } from '@material-ui/styles'
+import theme from './theme'
+
 import { Router } from 'react-router-dom'
 import history from './history'
 
-import { Navbar } from './components'
 import Routes from './routes'
 
 const App = () => {
   return (
     <ApolloProvider client={client}>
       <ProvideAuth>
-        <Router history={history}>
-          <Navbar />
-          <Routes />
-        </Router>
+        <ThemeProvider theme={theme}>
+          <Router history={history}>
+            <Routes />
+          </Router>
+        </ThemeProvider>
       </ProvideAuth>
     </ApolloProvider>
   )

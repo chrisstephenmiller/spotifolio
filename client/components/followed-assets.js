@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const FollowedAssets = ({ assets, holdings, addHolding }) => {
+const FollowedAssets = ({ assets, holdings, addHolding }) => {
   const holdAsset = asset => {
     const assetType = `${asset.__typename.toLowerCase() + 'Ids'}`
     const variables = { [assetType]: asset.spotifyId }

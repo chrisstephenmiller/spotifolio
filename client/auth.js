@@ -9,6 +9,7 @@ function useProvideAuth() {
   const logout = async () => {
     await axios.post('/auth/logout')
     setUser(null)
+    window.location = '/'
   }
 
   const getUser = async () => {

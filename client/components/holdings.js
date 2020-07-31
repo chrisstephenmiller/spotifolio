@@ -26,7 +26,7 @@ const getAssets = holdings => {
   return loading || error ? null : Object.fromEntries(data.getAssets.map(asset => [asset.spotifyId, asset]))
 }
 
-export const Holdings = ({ holdings }) => {
+const Holdings = ({ holdings }) => {
   const assets = getAssets(holdings)
   return !assets ? null : (
     <div style={{ display: 'inline-flex' }}>

@@ -1,5 +1,19 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 body {
   font-family: sans-serif;
+  background-color: #f4f6f8;
+  height: 100%;
+}
+
+html {
+  height: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 a {
@@ -18,4 +32,8 @@ nav a {
 form div {
   margin: 1em;
   display: inline-block;
+}
+
+#app {
+  height: 100%;
 }

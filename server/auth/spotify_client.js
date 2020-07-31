@@ -1,6 +1,6 @@
 const SpotifyWebApi = require('spotify-web-api-node')
 
-module.exports = ({ session, graphql }) => {
+module.exports = ({ session, graphql, user }) => {
   const spotifyWebApi = new SpotifyWebApi({
     clientId: process.env.SPOTIFY_CLIENT_ID,
     clientSecret: process.env.SPOTIFY_CLIENT_SECRET
@@ -42,7 +42,7 @@ module.exports = ({ session, graphql }) => {
 
   return async appAuth => {
     const accessToken =
-      appAuth === null // null passed for scopeless api (rate limiting)
+      appAuth === null || !user // null passed for scopeless api (rate limiting)
         ? await getAppToken() // scopeless, no auth needed
         : validateUserSession(session) // auth needed, confirm user or graphql session
           ? await getUserToken(session) // confirm userToken is current, refresh if necessary

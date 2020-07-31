@@ -4,8 +4,8 @@ const profileMap = profile => {
     name: display_name,
     username: id,
     followers: followers.total,
-    email,
-    images
+    imageUrl: images[0].url,
+    email
   }
 }
 

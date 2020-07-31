@@ -16,7 +16,6 @@ const createGraphqlSession = async req => {
 const context = async ({ req }) => {
   const graphqlSession = req.headers.graphql && process.env.NODE_ENV === 'development'
   if (graphqlSession) await createGraphqlSession(req)
-
   req.spotify = spotifyApi(req)
   return req
 }
