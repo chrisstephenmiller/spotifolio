@@ -12,22 +12,27 @@ const getAssetQueryVariables = holdings => {
   return variables
 }
 
-const makeAssetsDict = assets => Object.fromEntries(assets.map(asset => [asset.spotifyId, asset]))
+const calcChange = (a, v) => Math.ceil(10000 * ((v - a) / a)) / 100
+const calcFollowers = asset =>
+  !asset.artists
+    ? asset.followers
+    : asset.artists.reduce((p, c) => ({ followers: p.followers + c.followers })).followers
 
-module.exports = async (parent, { holdingIds, spotifyIds }, req) => {
-  const userId = req.user.id
-
-  if (holdingIds === spotifyIds) {
-    const holdings = await Holding.findAll({ where: { userId }, raw: true })
-    const variables = getAssetQueryVariables(holdings)
-    const assets = await getAssets(parent, variables, req)
-    const assetDict = makeAssetsDict(assets)
-    for (const holding of holdings) holding.value = holding.value || assetDict[holding.spotifyId]
-    return holdings
+const holdingsWithAssetsAndValues = (holdings, assets) => {
+  const assetDict = Object.fromEntries(assets.map(asset => [asset.spotifyId, asset]))
+  for (const holding of holdings) {
+    holding.value = holding.value || assetDict[holding.spotifyId]
+    holding.popularityPct = calcChange(holding.asset.popularity, holding.value.popularity)
+    holding.followersPct = calcChange(calcFollowers(holding.asset), calcFollowers(holding.value)) || null
+    holding.performancePct = (holding.popularityPct + holding.followersPct).toFixed(2)
   }
+  return holdings
+}
 
-  return [
-    ...holdingIds.map(holdingId => Holding.findByPk(holdingId)),
-    ...spotifyIds.map(spotifyId => Holding.findOne({ where: { userId, spotifyId } }))
-  ]
+module.exports = async (parent, args, req) => {
+  const userId = req.user.id
+  const holdings = await Holding.findAll({ where: { userId }, raw: true })
+  const variables = getAssetQueryVariables(holdings)
+  const assets = await getAssets(parent, variables, req)
+  return holdingsWithAssetsAndValues(holdings, assets)
 }

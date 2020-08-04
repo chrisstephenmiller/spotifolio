@@ -22,10 +22,13 @@ module.exports = gql`
     id: Int!
     userId: Int!
     spotifyId: String!
-    createdAt: String!
     asset: Asset!
-    destroyedAt: String
+    createdAt: String!
     value: Asset
+    destroyedAt: String
+    popularityPct: Float!
+    followersPct: Float!
+    performancePct: Float!
   }
 
   interface Asset {
