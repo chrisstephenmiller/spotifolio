@@ -1,7 +1,13 @@
 import React from 'react'
 import { withRouter, Switch } from 'react-router-dom'
 import { Main as MainLayout, Minimal as MinimalLayout, RouteWithLayout } from './layouts'
-import { Account as AccountView, HoldingList as HoldingListView, LoggedOut as LoggedOutView } from './views'
+import {
+  Account as AccountView,
+  HoldingList as HoldingListView,
+  AssetList as AssetListView,
+  LoggedOut as LoggedOutView
+} from './views'
+
 import { useAuth } from './auth'
 
 const Routes = () => {
@@ -15,6 +21,7 @@ const Routes = () => {
           <Switch>
             <RouteWithLayout component={AccountView} layout={MainLayout} path="/account" />
             <RouteWithLayout component={HoldingListView} layout={MainLayout} path="/holdings" />
+            <RouteWithLayout component={AssetListView} layout={MainLayout} path="/assets" />
             <RouteWithLayout component={() => <div />} layout={MainLayout} path="/" />
           </Switch>
         )}

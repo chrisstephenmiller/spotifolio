@@ -1,7 +1,8 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/styles'
 import { Divider, Drawer } from '@material-ui/core'
-import PeopleIcon from '@material-ui/icons/People'
+import Headset from '@material-ui/icons/Headset'
+import MusicNote from '@material-ui/icons/MusicNote'
 import AccountBoxIcon from '@material-ui/icons/AccountBox'
 
 import { Profile, SidebarNav } from './components'
@@ -38,7 +39,12 @@ const Sidebar = props => {
     {
       title: 'Holdings',
       href: '/holdings',
-      icon: <PeopleIcon />
+      icon: <Headset />
+    },
+    {
+      title: 'Assets',
+      href: '/assets',
+      icon: <MusicNote />
     },
     {
       title: 'Account',
