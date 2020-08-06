@@ -1,11 +1,8 @@
 import React from 'react'
 import { withRouter, Switch } from 'react-router-dom'
-import { RouteWithLayout } from './components'
-import { useAuth } from './auth'
-
-import { Main as MainLayout, Minimal as MinimalLayout } from './layouts'
-
+import { Main as MainLayout, Minimal as MinimalLayout, RouteWithLayout } from './layouts'
 import { Account as AccountView, HoldingList as HoldingListView, LoggedOut as LoggedOutView } from './views'
+import { useAuth } from './auth'
 
 const Routes = () => {
   const { user } = useAuth()

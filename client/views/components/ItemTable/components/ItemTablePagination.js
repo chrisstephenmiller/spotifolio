@@ -1,9 +1,8 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { TablePagination } from '@material-ui/core'
 
-const HoldingTablePagination = props => {
-  const { holdings, page, rowsPerPage, setPage, setRowsPerPage, ...rest } = props
+const ItemTablePagination = props => {
+  const { count, page, rowsPerPage, setPage, setRowsPerPage } = props
 
   const handlePageChange = (event, currentPage) => {
     setPage(currentPage)
@@ -16,9 +15,8 @@ const HoldingTablePagination = props => {
 
   return (
     <TablePagination
-      {...rest}
       component="div"
-      count={holdings.length}
+      count={count}
       page={page}
       onChangePage={handlePageChange}
       rowsPerPage={rowsPerPage}
@@ -28,9 +26,4 @@ const HoldingTablePagination = props => {
   )
 }
 
-HoldingTablePagination.propTypes = {
-  className: PropTypes.string,
-  holdings: PropTypes.array.isRequired
-}
-
-export default HoldingTablePagination
+export default ItemTablePagination

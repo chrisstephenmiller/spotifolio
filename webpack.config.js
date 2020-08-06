@@ -15,7 +15,6 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx'],
     alias: {
-      components: path.resolve(__dirname, 'client/components/'),
       gqlRequests: path.resolve(__dirname, 'client/graphql/')
     }
   },

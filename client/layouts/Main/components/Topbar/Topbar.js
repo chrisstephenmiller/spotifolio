@@ -1,7 +1,5 @@
 import React, { useState } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
-import clsx from 'clsx'
-import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/styles'
 import { AppBar, Toolbar, Badge, Hidden, IconButton } from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu'
@@ -26,7 +24,7 @@ const useStyles = makeStyles(theme => ({
 import { useAuth } from '../../../../auth'
 
 const Topbar = props => {
-  const { className, onSidebarOpen, ...rest } = props
+  const { onSidebarOpen } = props
 
   const classes = useStyles()
 
@@ -35,7 +33,7 @@ const Topbar = props => {
   const { logout } = useAuth()
 
   return (
-    <AppBar {...rest} className={clsx(classes.root, className)}>
+    <AppBar className={classes.root}>
       <Toolbar>
         <RouterLink to="/">
           <span className={classes.logo}>SPOTIFOLIO</span>
@@ -59,11 +57,6 @@ const Topbar = props => {
       </Toolbar>
     </AppBar>
   )
-}
-
-Topbar.propTypes = {
-  className: PropTypes.string,
-  onSidebarOpen: PropTypes.func
 }
 
 export default Topbar

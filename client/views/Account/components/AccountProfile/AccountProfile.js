@@ -1,6 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import clsx from 'clsx'
 import { makeStyles } from '@material-ui/styles'
 import { Card, CardContent, Avatar, Typography } from '@material-ui/core'
 
@@ -19,7 +17,7 @@ const useStyles = makeStyles(() => ({
 }))
 
 const AccountProfile = props => {
-  const { profile, className, ...rest } = props
+  const { profile } = props
 
   const classes = useStyles()
 
@@ -30,7 +28,7 @@ const AccountProfile = props => {
   )
 
   return (
-    <Card {...rest} className={clsx(classes.root, className)}>
+    <Card>
       <CardContent>
         <div className={classes.details}>
           <div>
@@ -46,10 +44,6 @@ const AccountProfile = props => {
       </CardContent>
     </Card>
   )
-}
-
-AccountProfile.propTypes = {
-  className: PropTypes.string
 }
 
 export default AccountProfile

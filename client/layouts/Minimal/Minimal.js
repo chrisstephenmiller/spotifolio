@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/styles'
 
 import { Topbar } from './components'
@@ -25,10 +24,6 @@ const Minimal = props => {
       <main className={classes.content}>{children}</main>
     </div>
   )
-}
-
-Minimal.propTypes = {
-  children: PropTypes.node
 }
 
 export default Minimal
