@@ -8,7 +8,7 @@ const remainingTracks = playlistTracks => {
 const playlistTracksMap = (playlist, tracks) => {
   const { name, id, description, images } = playlist
   return {
-    spotifyId: id,
+    id,
     name,
     description,
     images,
@@ -29,7 +29,7 @@ module.exports = async (parent, { playlistId }, req) => {
     playlistTracks.items.push(...body.items)
   }
 
-  const trackIds = playlistTracks.items.map(item => item.track.id)
+  const trackIds = playlistTracks.items.map(playlistTrack => playlistTrack.track.id)
   const tracks = await getTracks(parent, { trackIds }, req)
 
   return playlistTracksMap(playlist.body, tracks)

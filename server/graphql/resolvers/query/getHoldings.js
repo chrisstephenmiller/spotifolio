@@ -19,12 +19,12 @@ const calcFollowers = asset =>
     : asset.artists.reduce((p, c) => ({ followers: p.followers + c.followers })).followers
 
 const holdingsWithAssetsAndValues = (holdings, assets) => {
-  const assetDict = Object.fromEntries(assets.map(asset => [asset.spotifyId, asset]))
+  const assetDict = Object.fromEntries(assets.map(asset => [asset.id, asset]))
   for (const holding of holdings) {
     holding.value = holding.value || assetDict[holding.spotifyId]
-    holding.popularityPct = calcChange(holding.asset.popularity, holding.value.popularity)
-    holding.followersPct = calcChange(calcFollowers(holding.asset), calcFollowers(holding.value)) || null
-    holding.performancePct = (holding.popularityPct + holding.followersPct).toFixed(2)
+    holding.popularity = calcChange(holding.asset.popularity, holding.value.popularity)
+    holding.followers = calcChange(calcFollowers(holding.asset), calcFollowers(holding.value)) || null
+    holding.performance = (holding.popularity + holding.followers).toFixed(2)
   }
   return holdings
 }

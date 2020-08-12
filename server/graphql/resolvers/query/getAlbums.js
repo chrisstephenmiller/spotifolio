@@ -3,7 +3,7 @@ const getTracks = require('./getTracks')
 
 const albumAssetIds = albums => {
   return [
-    albums.flatMap(album => album.tracks.items.map(item => item.id)),
+    albums.flatMap(album => album.tracks.items.map(track => track.id)),
     albums.flatMap(album => album.artists.map(artist => artist.id))
   ]
 }
@@ -13,7 +13,7 @@ const albumAssetsMap = (album, assets) => {
   return {
     tracks: assets[0].splice(0, tracks.items.length),
     artists: assets[1].splice(0, artists.length),
-    spotifyId: id,
+    id,
     name,
     popularity,
     genres,

@@ -1,11 +1,10 @@
 const getArtists = require('./getArtists')
 
-const idToSpotifyId = ({ name, id }) => ({ spotifyId: id, name })
-
 const trackAlbumMap = album => {
   return {
-    ...idToSpotifyId(album),
-    artists: album.artists.map(idToSpotifyId)
+    id: album.id,
+    name: album.name,
+    artists: album.artists.map(({ id, name }) => ({ id, name }))
   }
 }
 
@@ -14,7 +13,7 @@ const trackArtistsMap = (track, trackArtists) => {
   return {
     artists: trackArtists.splice(0, artists.length),
     album: trackAlbumMap(album),
-    spotifyId: id,
+    id,
     name,
     popularity,
     images: album.images

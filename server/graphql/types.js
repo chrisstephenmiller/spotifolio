@@ -10,6 +10,7 @@ module.exports = gql`
     getFollowedArtists: [Artist]
     getUserPlaylists: [UserPlaylist]
     getSavedTracks: [Track]
+    getSavedAlbums: [Album]
     getHoldings(holdingIds: [Int], spotifyIds: [String]): [Holding]
     getAssets(artistIds: [String] = [], trackIds: [String] = [], albumIds: [String] = []): [Asset]
   }
@@ -26,20 +27,20 @@ module.exports = gql`
     createdAt: String!
     value: Asset
     destroyedAt: String
-    popularityPct: Float!
-    followersPct: Float!
-    performancePct: Float!
+    popularity: Float!
+    followers: Float!
+    performance: Float!
   }
 
   interface Asset {
-    spotifyId: String!
+    id: String!
     name: String!
     popularity: Int!
     images: [Image]
   }
 
   type Artist implements Asset {
-    spotifyId: String!
+    id: String!
     name: String!
     followers: Int!
     popularity: Int!
@@ -49,7 +50,7 @@ module.exports = gql`
 
   type Track implements Asset {
     images: [Image]!
-    spotifyId: String!
+    id: String!
     name: String!
     popularity: Int!
     artists: [Artist]!
@@ -59,7 +60,7 @@ module.exports = gql`
   type Album implements Asset {
     name: String!
     artists: [Artist]
-    spotifyId: String!
+    id: String!
     popularity: Int!
     genres: [String]!
     images: [Image]!
@@ -68,18 +69,18 @@ module.exports = gql`
 
   type TrackAlbum {
     name: String!
-    spotifyId: String!
+    id: String!
     artists: [TrackAlbumArtist]!
   }
 
   type TrackAlbumArtist {
     name: String!
-    spotifyId: String!
+    id: String!
   }
 
   type Playlist {
     name: String!
-    spotifyId: String!
+    id: String!
     description: String!
     images: [Image]!
     tracks: [Track]!
@@ -87,7 +88,7 @@ module.exports = gql`
 
   type UserPlaylist {
     name: String!
-    spotifyId: String!
+    id: String!
     description: String!
     images: [Image]
     total: Int!

@@ -1,7 +1,7 @@
 const userPlaylistsMap = playlist => {
   const { name, id, description, images, tracks } = playlist
   return {
-    spotifyId: id,
+    id,
     total: tracks.total,
     public: playlist.public,
     name,

@@ -1,37 +1,25 @@
 import React from 'react'
 import { Checkbox, TableBody, TableCell, TableRow } from '@material-ui/core'
-import { PercentChange, AvatarAndName, DateCell } from './ItemTableCells'
-
-const formatDataForTableCells = (item, data) => {
-  const tableCellFormats = {
-    avatar: AvatarAndName,
-    percent: PercentChange,
-    date: DateCell,
-    default: () => data.value(item)
-  }
-
-  const cellFormat = tableCellFormats[data.format || 'default']
-
-  return data.format === 'avatar' ? cellFormat(data.value(item), data.imageUrl(item)) : cellFormat(data.value(item))
-}
+import formatTableCell from './ItemTableCells'
 
 const ItemTableBody = props => {
-  const { itemData, tableItems, handleSelectOne, selectedItems } = props
+  const { itemsMetadata, tableItems, handleSelectOne, selectedItems } = props
 
   return (
     <TableBody>
       {tableItems.map(item => {
+        const rowSelected = selectedItems.indexOf(item.id) !== -1
         return (
-          <TableRow hover key={item.id} selected={selectedItems.indexOf(item.id) !== -1}>
+          <TableRow hover key={item.id} selected={rowSelected}>
             <TableCell padding="checkbox">
               <Checkbox
-                checked={selectedItems.indexOf(item.id) !== -1}
+                checked={rowSelected}
                 color="primary"
                 onChange={event => handleSelectOne(event, item.id)}
                 value="true"
               />
             </TableCell>
-            {itemData.map(data => <TableCell key={data.label}>{formatDataForTableCells(item, data)}</TableCell>)}
+            {itemsMetadata.map(data => <TableCell key={data.label}>{formatTableCell(item, data)}</TableCell>)}
           </TableRow>
         )
       })}

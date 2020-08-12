@@ -6,9 +6,9 @@ const getHoldingsQuery = gql`
       id
       spotifyId
       createdAt
-      popularityPct
-      followersPct
-      performancePct
+      popularity
+      followers
+      performance
       asset {
         name
         popularity

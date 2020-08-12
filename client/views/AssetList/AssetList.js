@@ -1,18 +1,18 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/styles'
-import { ItemTable } from '../components'
-import { getFollowedArtists } from 'gqlRequests'
+import { ItemTable, ItemToolbar } from '../components'
+import { getFollowedArtists, getHoldings } from 'gqlRequests'
 
-const itemData = [
+const assetMetadata = [
   {
     label: 'Name',
-    value: asset => asset.name,
     imageUrl: asset => asset.images.slice(-1)[0].url,
     direction: 'asc',
     format: 'avatar'
   },
-  { label: 'Popularity', value: asset => asset.popularity, direction: 'desc' },
-  { label: 'Followers', value: asset => asset.followers, direction: 'desc' }
+  { label: 'Popularity' },
+  { label: 'Followers' },
+  { label: 'Bought', format: 'date' }
 ]
 
 const useStyles = makeStyles(theme => ({
@@ -21,14 +21,21 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
+const addHoldingsToAssets = (assets, holdings) => {
+  const holdingsDict = Object.fromEntries(holdings.map(holding => [holding.spotifyId, holding]))
+  const heldAsset = asset => (holdingsDict[asset.id] ? holdingsDict[asset.id].createdAt : 0)
+  return assets.map(asset => ({ ...asset, bought: heldAsset(asset) }))
+}
+
 const AssetList = () => {
   const classes = useStyles()
-  const assets = getFollowedArtists()
+  const assetsWithHoldings = addHoldingsToAssets(getFollowedArtists(), getHoldings())
 
   return (
     <div className={classes.root}>
       <div>
-        <ItemTable items={assets} itemData={itemData} />
+        <ItemToolbar />
+        <ItemTable items={assetsWithHoldings} itemsMetadata={assetMetadata} />
       </div>
     </div>
   )

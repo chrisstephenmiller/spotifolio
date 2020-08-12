@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/styles'
 import { ItemTable } from '../components'
 import { getHoldings } from 'gqlRequests'
 
-const itemData = [
+const holdingMetadata = [
   {
     label: 'Name',
     value: holding => holding.asset.name,
@@ -11,12 +11,12 @@ const itemData = [
     direction: 'asc',
     format: 'avatar'
   },
-  { label: 'Performance', value: holding => holding.performancePct, direction: 'desc', format: 'percent' },
-  { label: 'Popularity', value: holding => holding.popularityPct, direction: 'desc', format: 'percent' },
-  { label: 'Followers', value: holding => holding.followersPct, direction: 'desc', format: 'percent' },
+  { label: 'Performance', format: 'percent' },
+  { label: 'Popularity', format: 'percent' },
+  { label: 'Followers', format: 'percent' },
   { label: 'Type', value: holding => holding.asset.__typename, direction: 'asc' },
-  { label: 'Bought', value: holding => holding.createdAt, direction: 'desc', format: 'date' },
-  { label: 'Sold', value: holding => holding.destroyedAt, direction: 'desc', format: 'date' }
+  { label: 'Bought', value: holding => holding.createdAt, format: 'date' },
+  { label: 'Sold', value: holding => holding.destroyedAt, format: 'date' }
 ]
 
 const useStyles = makeStyles(theme => ({
@@ -32,7 +32,7 @@ const HoldingList = () => {
   return (
     <div className={classes.root}>
       <div>
-        <ItemTable items={holdings} itemData={itemData} />
+        <ItemTable items={holdings} itemsMetadata={holdingMetadata} />
       </div>
     </div>
   )

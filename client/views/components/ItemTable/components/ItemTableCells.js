@@ -3,7 +3,7 @@ import moment from 'moment'
 
 import { Avatar, Typography } from '@material-ui/core'
 
-export const PercentChange = percent => {
+const PercentChange = percent => {
   const color = percent > 0 ? 'green' : percent < 0 ? 'red' : 'grey'
   return (
     <Typography variant="h6" style={{ fontWeight: 'bold', color }}>
@@ -12,7 +12,7 @@ export const PercentChange = percent => {
   )
 }
 
-export const AvatarAndName = (name, imageUrl) => {
+const AvatarAndName = (name, imageUrl) => {
   return (
     <div style={{ display: 'flex', alignItems: 'center' }}>
       <Avatar style={{ marginRight: 8 }} src={imageUrl}>
@@ -23,6 +23,23 @@ export const AvatarAndName = (name, imageUrl) => {
   )
 }
 
-export const DateCell = date => (date ? moment(+date).format('M/DD/YYYY') : '-')
+const DateCell = date => (date ? moment(+date).format('M/DD/YYYY') : '-')
 
-export const Default = data => data
+const Default = value => value
+
+const cellFormats = {
+  avatar: AvatarAndName,
+  percent: PercentChange,
+  date: DateCell,
+  default: Default
+}
+
+const formatTableCell = (item, itemMetadata) => {
+  const { value, label, imageUrl, format } = itemMetadata
+  const cellValue = value ? value(item) : item[label.toLowerCase()]
+  const cellFormat = cellFormats[format || 'default']
+  const cellImage = imageUrl && imageUrl(item)
+  return cellFormat(cellValue, cellImage)
+}
+
+export default formatTableCell

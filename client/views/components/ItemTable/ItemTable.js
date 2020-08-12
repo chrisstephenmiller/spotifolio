@@ -18,7 +18,7 @@ const useStyles = makeStyles(() => ({
 }))
 
 const ItemTable = props => {
-  const { items, itemData } = props
+  const { items, itemsMetadata } = props
 
   const classes = useStyles()
 
@@ -42,9 +42,11 @@ const ItemTable = props => {
   const [selectedSortDirection, setSortDirection] = useState('asc')
 
   const sortAndPaginateItems = () => {
+    const selectedLabelData = itemsMetadata.find(i => i.label === selectedSortLabel)
+    const defaultSortValue = item => item[selectedLabelData.label.toLowerCase()]
+    const sortValue = selectedLabelData.value || defaultSortValue
     const ascOrDesc = selectedSortDirection === 'asc' ? 1 : -1
-    const { value } = itemData.find(i => i.label === selectedSortLabel)
-    const sortFunction = (a, b) => (value(a) > value(b) ? ascOrDesc : -ascOrDesc)
+    const sortFunction = (a, b) => (sortValue(a) > sortValue(b) ? ascOrDesc : -ascOrDesc)
     return [...items].sort(sortFunction).slice(page * rowsPerPage, (page + 1) * rowsPerPage)
   }
 
@@ -57,7 +59,7 @@ const ItemTable = props => {
           <div className={classes.inner}>
             <Table>
               <ItemTableHead
-                itemData={itemData}
+                itemsMetadata={itemsMetadata}
                 selectedSortLabel={selectedSortLabel}
                 setSortLabel={setSortLabel}
                 selectedSortDirection={selectedSortDirection}
@@ -67,7 +69,7 @@ const ItemTable = props => {
                 handleSelectAll={handleSelectAll}
               />
               <ItemTableBody
-                itemData={itemData}
+                itemsMetadata={itemsMetadata}
                 tableItems={tableItems}
                 selectedItems={selectedItems}
                 handleSelectOne={handleSelectOne}

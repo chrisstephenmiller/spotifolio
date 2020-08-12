@@ -1,7 +1,7 @@
 const artistMap = artist => {
   const { name, id, popularity, genres, followers, images } = artist
   return {
-    spotifyId: id,
+    id,
     followers: followers.total,
     name,
     popularity,

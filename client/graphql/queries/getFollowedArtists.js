@@ -3,6 +3,7 @@ import { useQuery, gql } from '@apollo/client'
 const getFollowedArtistsQuery = gql`
   query {
     getFollowedArtists {
+      id
       name
       popularity
       followers

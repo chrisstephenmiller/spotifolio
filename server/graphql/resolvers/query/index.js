@@ -7,6 +7,7 @@ const getFollowedArtists = require('./getFollowedArtists')
 const getPlaylist = require('./getPlaylist')
 const getUserPlaylists = require('./getUserPlaylists')
 const getSavedTracks = require('./getSavedTracks')
+const getSavedAlbums = require('./getSavedAlbums')
 const getHoldings = require('./getHoldings')
 
 module.exports = {
@@ -14,6 +15,7 @@ module.exports = {
   getAssets,
   getPlaylist,
   getSavedTracks,
+  getSavedAlbums,
   getUserPlaylists,
   getHoldings,
   getFollowedArtists,
