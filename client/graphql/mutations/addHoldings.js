@@ -1,4 +1,5 @@
 import { useMutation, gql } from '@apollo/client'
+import { getHoldingsQuery } from 'gqlRequests'
 
 const addHoldingsMutation = gql`
   mutation($artistIds: [String] = [], $trackIds: [String] = [], $albumIds: [String] = []) {
@@ -16,6 +17,6 @@ const addHoldingsMutation = gql`
 `
 
 export const addHoldings = () => {
-  const { data } = useMutation(addHoldingsMutation)
-  return data ? data.addHoldings : []
+  const [addHoldingsFromAssetIds] = useMutation(addHoldingsMutation, { refetchQueries: [{ query: getHoldingsQuery }] })
+  return addHoldingsFromAssetIds
 }

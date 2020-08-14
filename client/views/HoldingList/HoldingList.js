@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/styles'
 import { ItemTable } from '../components'
 import { getHoldings } from 'gqlRequests'
@@ -29,10 +29,17 @@ const HoldingList = () => {
   const classes = useStyles()
   const holdings = getHoldings()
 
+  const [selectedItems, setSelectedItems] = useState([])
+
   return (
     <div className={classes.root}>
       <div>
-        <ItemTable items={holdings} itemsMetadata={holdingMetadata} />
+        <ItemTable
+          items={holdings}
+          itemTableMetadata={holdingMetadata}
+          selectedItems={selectedItems}
+          setSelectedItems={setSelectedItems}
+        />
       </div>
     </div>
   )

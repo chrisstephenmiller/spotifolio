@@ -18,20 +18,18 @@ const useStyles = makeStyles(() => ({
 }))
 
 const ItemTable = props => {
-  const { items, itemsMetadata } = props
+  const { items, itemTableMetadata, selectedItems, setSelectedItems } = props
 
   const classes = useStyles()
 
-  const [selectedItems, setSelectedItems] = useState([])
-
   const handleSelectAll = event => {
-    const allSelectedItems = event.target.checked ? items.map(item => item.id) : []
+    const allSelectedItems = event.target.checked ? [...items] : []
     setSelectedItems(allSelectedItems)
   }
 
-  const handleSelectOne = (event, id) => {
-    const selectedIndex = selectedItems.indexOf(id)
-    selectedIndex > -1 ? selectedItems.splice(selectedIndex, 1) : selectedItems.push(id)
+  const handleSelectOne = (event, item) => {
+    const selectedIndex = selectedItems.map(selectedItem => selectedItem.id).indexOf(item.id)
+    selectedIndex > -1 ? selectedItems.splice(selectedIndex, 1) : selectedItems.push(item)
     setSelectedItems([...selectedItems])
   }
 
@@ -42,12 +40,18 @@ const ItemTable = props => {
   const [selectedSortDirection, setSortDirection] = useState('asc')
 
   const sortAndPaginateItems = () => {
-    const selectedLabelData = itemsMetadata.find(i => i.label === selectedSortLabel)
+    const selectedLabelData = itemTableMetadata.find(i => i.label === selectedSortLabel)
     const defaultSortValue = item => item[selectedLabelData.label.toLowerCase()]
     const sortValue = selectedLabelData.value || defaultSortValue
     const ascOrDesc = selectedSortDirection === 'asc' ? 1 : -1
     const sortFunction = (a, b) => (sortValue(a) > sortValue(b) ? ascOrDesc : -ascOrDesc)
-    return [...items].sort(sortFunction).slice(page * rowsPerPage, (page + 1) * rowsPerPage)
+    const itemSelected = item => ({
+      ...item,
+      selected: selectedItems.some(selectedItem => selectedItem.id === item.id)
+    })
+    const itemsSelected = items.map(itemSelected)
+    const onePage = [page * rowsPerPage, (page + 1) * rowsPerPage]
+    return itemsSelected.sort(sortFunction).slice(...onePage)
   }
 
   const tableItems = sortAndPaginateItems()
@@ -59,7 +63,7 @@ const ItemTable = props => {
           <div className={classes.inner}>
             <Table>
               <ItemTableHead
-                itemsMetadata={itemsMetadata}
+                itemTableMetadata={itemTableMetadata}
                 selectedSortLabel={selectedSortLabel}
                 setSortLabel={setSortLabel}
                 selectedSortDirection={selectedSortDirection}
@@ -69,9 +73,8 @@ const ItemTable = props => {
                 handleSelectAll={handleSelectAll}
               />
               <ItemTableBody
-                itemsMetadata={itemsMetadata}
+                itemTableMetadata={itemTableMetadata}
                 tableItems={tableItems}
-                selectedItems={selectedItems}
                 handleSelectOne={handleSelectOne}
               />
             </Table>

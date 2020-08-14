@@ -1,3 +1,3 @@
 export { getProfile } from './getProfile'
-export { getHoldings } from './getHoldings'
+export { getHoldings, getHoldingsQuery } from './getHoldings'
 export { getFollowedArtists } from './getFollowedArtists'

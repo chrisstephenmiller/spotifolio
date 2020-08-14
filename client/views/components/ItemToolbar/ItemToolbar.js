@@ -14,15 +14,15 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const ItemToolbar = props => {
+const ItemToolbar = ({ buttonConfig }) => {
   const classes = useStyles()
 
   return (
     <div>
       <div className={classes.row}>
         <span className={classes.spacer} />
-        <Button color="primary" variant="contained">
-          Add Holdings
+        <Button color="primary" variant="contained" onClick={buttonConfig.handler}>
+          {buttonConfig.text}
         </Button>
       </div>
       <div className={classes.row} />

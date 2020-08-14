@@ -3,7 +3,7 @@ import { Checkbox, TableCell, TableHead, TableRow, TableSortLabel } from '@mater
 
 const ItemTableHead = props => {
   const {
-    itemsMetadata,
+    itemTableMetadata,
     setSortLabel,
     selectedSortLabel,
     setSortDirection,
@@ -40,7 +40,7 @@ const ItemTableHead = props => {
         <TableCell padding="checkbox">
           <Checkbox color="primary" checked={allSelected} indeterminate={someSelected} onChange={handleSelectAll} />
         </TableCell>
-        {itemsMetadata.map(itemMetadata => {
+        {itemTableMetadata.map(itemMetadata => {
           return (
             <TableCell key={itemMetadata.label}>
               <ItemTableSortLabel itemMetadata={itemMetadata} />

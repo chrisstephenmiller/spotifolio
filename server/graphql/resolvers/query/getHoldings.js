@@ -23,7 +23,7 @@ const holdingsWithAssetsAndValues = (holdings, assets) => {
   for (const holding of holdings) {
     holding.value = holding.value || assetDict[holding.spotifyId]
     holding.popularity = calcChange(holding.asset.popularity, holding.value.popularity)
-    holding.followers = calcChange(calcFollowers(holding.asset), calcFollowers(holding.value)) || null
+    holding.followers = calcChange(calcFollowers(holding.asset), calcFollowers(holding.value))
     holding.performance = (holding.popularity + holding.followers).toFixed(2)
   }
   return holdings

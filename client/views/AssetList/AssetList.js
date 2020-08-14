@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/styles'
 import { ItemTable, ItemToolbar } from '../components'
-import { getFollowedArtists, getHoldings } from 'gqlRequests'
+import { getFollowedArtists, getHoldings, addHoldings } from 'gqlRequests'
 
 const assetMetadata = [
   {
@@ -29,13 +29,39 @@ const addHoldingsToAssets = (assets, holdings) => {
 
 const AssetList = () => {
   const classes = useStyles()
-  const assetsWithHoldings = addHoldingsToAssets(getFollowedArtists(), getHoldings())
+
+  const holdings = getHoldings()
+  const artists = getFollowedArtists()
+  const assetsWithHoldings = addHoldingsToAssets(artists, holdings)
+
+  const [selectedItems, setSelectedItems] = useState([])
+
+  const addHoldingsFromAssetIds = addHoldings()
+
+  const holdAssets = () => {
+    const assetIds = { artistIds: [] }
+    for (const item of selectedItems) {
+      const assetType = item.__typename.toLowerCase() + 'Ids'
+      assetIds[assetType].push(item.id)
+    }
+    addHoldingsFromAssetIds({ variables: assetIds })
+  }
+
+  const holdAssetConfig = {
+    text: 'Hold Assets',
+    handler: holdAssets
+  }
 
   return (
     <div className={classes.root}>
       <div>
-        <ItemToolbar />
-        <ItemTable items={assetsWithHoldings} itemsMetadata={assetMetadata} />
+        <ItemToolbar buttonConfig={holdAssetConfig} />
+        <ItemTable
+          items={assetsWithHoldings}
+          itemTableMetadata={assetMetadata}
+          selectedItems={selectedItems}
+          setSelectedItems={setSelectedItems}
+        />
       </div>
     </div>
   )

@@ -3,23 +3,22 @@ import { Checkbox, TableBody, TableCell, TableRow } from '@material-ui/core'
 import formatTableCell from './ItemTableCells'
 
 const ItemTableBody = props => {
-  const { itemsMetadata, tableItems, handleSelectOne, selectedItems } = props
+  const { itemTableMetadata, tableItems, handleSelectOne } = props
 
   return (
     <TableBody>
       {tableItems.map(item => {
-        const rowSelected = selectedItems.indexOf(item.id) !== -1
         return (
-          <TableRow hover key={item.id} selected={rowSelected}>
+          <TableRow hover key={item.id} selected={item.selected}>
             <TableCell padding="checkbox">
               <Checkbox
-                checked={rowSelected}
+                checked={item.selected}
                 color="primary"
-                onChange={event => handleSelectOne(event, item.id)}
+                onChange={event => handleSelectOne(event, item)}
                 value="true"
               />
             </TableCell>
-            {itemsMetadata.map(data => <TableCell key={data.label}>{formatTableCell(item, data)}</TableCell>)}
+            {itemTableMetadata.map(data => <TableCell key={data.label}>{formatTableCell(item, data)}</TableCell>)}
           </TableRow>
         )
       })}

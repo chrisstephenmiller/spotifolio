@@ -2,7 +2,7 @@ const { Holding } = require('../../../db/models')
 const { getAssets } = require('../query')
 
 const makeHolding = (userId, asset) => {
-  const { spotifyId } = asset
+  const { id: spotifyId } = asset
   return Holding.findOrCreate({
     where: { userId, spotifyId, destroyedAt: null },
     defaults: { userId, spotifyId, asset },
