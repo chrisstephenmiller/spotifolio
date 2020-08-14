@@ -1,22 +1,17 @@
 const getTracks = require('./getTracks')
 
-const remainingItems = items => {
-  const { offset, total } = items
-  return offset + items.length < total
-}
-
 module.exports = async (parent, args, req) => {
   const spotifyApi = await req.spotify()
 
   const limit = 50
-  const userSavedTracks = await spotifyApi.getMySavedTracks({ limit })
-  const savedTracks = userSavedTracks.body.items
+  const { body: savedTracks } = await spotifyApi.getMySavedTracks({ limit })
 
-  while (remainingItems(savedTracks)) {
+  while (savedTracks.offset + savedTracks.items.length < savedTracks.total) {
     const offset = (savedTracks.offset += limit)
     const { body } = await spotifyApi.getMySavedTracks({ limit, offset })
-    savedTracks.push(...body.items)
+    savedTracks.items.push(...body.items)
   }
-  const trackIds = savedTracks.map(savedTrack => savedTrack.track.id)
+
+  const trackIds = savedTracks.items.map(savedTrack => savedTrack.track.id)
   return getTracks(parent, { trackIds }, req)
 }

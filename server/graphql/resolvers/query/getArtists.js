@@ -1,15 +1,3 @@
-const artistMap = artist => {
-  const { name, id, popularity, genres, followers, images } = artist
-  return {
-    id,
-    followers: followers.total,
-    name,
-    popularity,
-    genres,
-    images
-  }
-}
-
 module.exports = async (parent, { artistIds }, req) => {
   const spotifyApi = await req.spotify(null)
 
@@ -19,5 +7,5 @@ module.exports = async (parent, { artistIds }, req) => {
     artists.push(...body.artists.filter(Boolean))
   }
 
-  return artists.map(artistMap)
+  return artists.map(artist => ({ ...artist, followers: artist.followers.total }))
 }

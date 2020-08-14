@@ -1,32 +1,18 @@
-const userPlaylistsMap = playlist => {
-  const { name, id, description, images, tracks } = playlist
-  return {
-    id,
-    total: tracks.total,
-    public: playlist.public,
-    name,
-    description,
-    images
-  }
-}
-
-const remainingItems = items => {
-  const { offset, total } = items
-  return offset + items.length < total
-}
-
 module.exports = async (parent, args, req) => {
   const spotifyApi = await req.spotify()
 
   const limit = 50
-  const userPlaylists = await spotifyApi.getUserPlaylists({ limit })
-  const playlists = userPlaylists.body.items
+  const { body: playlists } = await spotifyApi.getUserPlaylists({ limit })
 
-  while (remainingItems(playlists)) {
+  while (playlists.offset + playlists.items.length < playlists.total) {
     const offset = (playlists.offset += limit)
     const { body } = await spotifyApi.getUserPlaylists({ limit, offset })
-    playlists.push(...body.items)
+    playlists.items.push(...body.items)
   }
 
-  return playlists.map(userPlaylistsMap)
+  return playlists.items.map(playlist => ({
+    ...playlist,
+    total: playlist.tracks.total,
+    public: playlist.public
+  }))
 }

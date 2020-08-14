@@ -8,19 +8,6 @@ const albumAssetIds = albums => {
   ]
 }
 
-const albumAssetsMap = (album, assets) => {
-  const { name, id, popularity, genres, images, tracks, artists } = album
-  return {
-    tracks: assets[0].splice(0, tracks.items.length),
-    artists: assets[1].splice(0, artists.length),
-    id,
-    name,
-    popularity,
-    genres,
-    images
-  }
-}
-
 module.exports = async (parent, { albumIds }, req) => {
   const spotifyApi = await req.spotify(null)
 
@@ -34,5 +21,9 @@ module.exports = async (parent, { albumIds }, req) => {
 
   const assets = await Promise.all([getTracks(parent, { trackIds }, req), getArtists(parent, { artistIds }, req)])
 
-  return albums.map(album => albumAssetsMap(album, assets))
+  return albums.map(album => ({
+    ...album,
+    tracks: assets[0].splice(0, album.tracks.items.length),
+    artists: assets[1].splice(0, album.artists.length)
+  }))
 }
