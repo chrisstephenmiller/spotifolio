@@ -1,6 +1,6 @@
 import { useQuery, gql } from '@apollo/client'
 
-const getHoldingsQuery = gql`
+export const getHoldingsQuery = gql`
   query {
     getHoldings {
       id
@@ -34,6 +34,7 @@ const getHoldingsQuery = gql`
 `
 
 export const getHoldings = () => {
-  const { data } = useQuery(getHoldingsQuery)
+  const { data, error } = useQuery(getHoldingsQuery)
+  if (error) console.log(error)
   return data ? data.getHoldings : []
 }

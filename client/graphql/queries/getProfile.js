@@ -13,6 +13,7 @@ const getProfileQuery = gql`
 `
 
 export const getProfile = () => {
-  const { data } = useQuery(getProfileQuery)
+  const { data, error } = useQuery(getProfileQuery)
+  if (error) console.log(error)
   return data ? data.getProfile : {}
 }

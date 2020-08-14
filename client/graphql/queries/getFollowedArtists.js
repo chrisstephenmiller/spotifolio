@@ -15,6 +15,7 @@ const getFollowedArtistsQuery = gql`
 `
 
 export const getFollowedArtists = () => {
-  const { data } = useQuery(getFollowedArtistsQuery)
+  const { data, error } = useQuery(getFollowedArtistsQuery)
+  if (error) console.log(error)
   return data ? data.getFollowedArtists : []
 }
