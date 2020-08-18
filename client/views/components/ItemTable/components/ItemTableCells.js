@@ -34,9 +34,9 @@ const cellFormats = {
   default: Default
 }
 
-const formatTableCell = (item, itemMetadata) => {
-  const { value, label, imageUrl, format } = itemMetadata
-  const cellValue = value ? value(item) : item[label.toLowerCase()]
+const formatTableCell = (item, cellConfig) => {
+  const { value, name, imageUrl, format } = cellConfig
+  const cellValue = value ? value(item) : item[name.toLowerCase()]
   const cellFormat = cellFormats[format || 'default']
   const cellImage = imageUrl && imageUrl(item)
   return cellFormat(cellValue, cellImage)

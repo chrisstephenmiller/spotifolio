@@ -3,7 +3,7 @@ import { Checkbox, TableBody, TableCell, TableRow } from '@material-ui/core'
 import formatTableCell from './ItemTableCells'
 
 const ItemTableBody = props => {
-  const { itemTableMetadata, tableItems, handleSelectOne } = props
+  const { itemTableConfig, tableItems, handleSelectOne } = props
 
   return (
     <TableBody>
@@ -18,7 +18,9 @@ const ItemTableBody = props => {
                 value="true"
               />
             </TableCell>
-            {itemTableMetadata.map(data => <TableCell key={data.label}>{formatTableCell(item, data)}</TableCell>)}
+            {itemTableConfig.labels.map(label => (
+              <TableCell key={label.name}>{formatTableCell(item, label)}</TableCell>
+            ))}
           </TableRow>
         )
       })}

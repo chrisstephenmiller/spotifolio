@@ -17,6 +17,13 @@ const addHoldingsMutation = gql`
 `
 
 export const addHoldings = () => {
-  const [addHoldingsFromAssetIds] = useMutation(addHoldingsMutation, { refetchQueries: [{ query: getHoldingsQuery }] })
-  return addHoldingsFromAssetIds
+  const [holdAssets] = useMutation(addHoldingsMutation, { refetchQueries: [{ query: getHoldingsQuery }] })
+  return assets => {
+    const assetIds = { artistIds: [], trackIds: [], albumIds: [] }
+    for (const asset of assets) {
+      const assetType = asset.__typename.toLowerCase() + 'Ids'
+      assetIds[assetType].push(asset.id)
+    }
+    return holdAssets({ variables: assetIds })
+  }
 }

@@ -3,7 +3,7 @@ import { Checkbox, TableCell, TableHead, TableRow, TableSortLabel } from '@mater
 
 const ItemTableHead = props => {
   const {
-    itemTableMetadata,
+    itemTableConfig,
     setSortLabel,
     selectedSortLabel,
     setSortDirection,
@@ -13,23 +13,23 @@ const ItemTableHead = props => {
     someSelected
   } = props
 
-  const handleSetSortLabel = itemMetadata => {
+  const handleSetSortLabel = label => {
     return () => {
       const reverse = selectedSortDirection === 'asc' ? 'desc' : 'asc'
-      const { label, direction } = itemMetadata
-      selectedSortLabel === label ? setSortDirection(reverse) : setSortDirection(direction || 'desc')
-      setSortLabel(label)
+      const { name, direction } = label
+      selectedSortLabel === name ? setSortDirection(reverse) : setSortDirection(direction || 'desc')
+      setSortLabel(name)
     }
   }
 
-  const ItemTableSortLabel = ({ itemMetadata }) => {
+  const ItemTableSortLabel = ({ label }) => {
     return (
       <TableSortLabel
-        active={selectedSortLabel === itemMetadata.label}
+        active={selectedSortLabel === label.name}
         direction={selectedSortDirection}
-        onClick={handleSetSortLabel(itemMetadata)}
+        onClick={handleSetSortLabel(label)}
       >
-        {itemMetadata.label}
+        {label.name}
       </TableSortLabel>
     )
   }
@@ -40,10 +40,10 @@ const ItemTableHead = props => {
         <TableCell padding="checkbox">
           <Checkbox color="primary" checked={allSelected} indeterminate={someSelected} onChange={handleSelectAll} />
         </TableCell>
-        {itemTableMetadata.map(itemMetadata => {
+        {itemTableConfig.labels.map(label => {
           return (
-            <TableCell key={itemMetadata.label}>
-              <ItemTableSortLabel itemMetadata={itemMetadata} />
+            <TableCell key={label.name}>
+              <ItemTableSortLabel label={label} />
             </TableCell>
           )
         })}

@@ -6,22 +6,22 @@ const useStyles = makeStyles(theme => ({
   row: {
     display: 'flex',
     alignItems: 'center',
-    margin: theme.spacing(1),
-    marginBottom: theme.spacing(2)
+    margin: theme.spacing(0.5),
+    marginBottom: theme.spacing(1.5)
   },
   spacer: {
     flexGrow: 1
   }
 }))
 
-const ItemToolbar = ({ buttonConfig }) => {
+const ItemTableToolbar = ({ buttonConfig, selectedItems }) => {
   const classes = useStyles()
 
   return (
     <div>
       <div className={classes.row}>
         <span className={classes.spacer} />
-        <Button color="primary" variant="contained" onClick={buttonConfig.handler}>
+        <Button color="primary" variant="contained" onClick={() => buttonConfig.handler(selectedItems)}>
           {buttonConfig.text}
         </Button>
       </div>
@@ -30,4 +30,4 @@ const ItemToolbar = ({ buttonConfig }) => {
   )
 }
 
-export default ItemToolbar
+export default ItemTableToolbar
