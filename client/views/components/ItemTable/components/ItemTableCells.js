@@ -12,10 +12,10 @@ const PercentChange = percent => {
   )
 }
 
-const AvatarAndName = (name, imageUrl) => {
+const AvatarAndName = (name, images) => {
   return (
     <div style={{ display: 'flex', alignItems: 'center' }}>
-      <Avatar style={{ marginRight: 8 }} src={imageUrl}>
+      <Avatar style={{ marginRight: 8 }} src={images.length ? images.slice(-1)[0].url : null}>
         {name.split(' ').map(([i]) => i)}
       </Avatar>
       <Typography variant="h5">{name}</Typography>
@@ -35,11 +35,10 @@ const cellFormats = {
 }
 
 const formatTableCell = (item, cellConfig) => {
-  const { value, name, imageUrl, format } = cellConfig
-  const cellValue = value ? value(item) : item[name.toLowerCase()]
+  const { name, format } = cellConfig
+  const cellValue = item[name.toLowerCase()]
   const cellFormat = cellFormats[format || 'default']
-  const cellImage = imageUrl && imageUrl(item)
-  return cellFormat(cellValue, cellImage)
+  return cellFormat(cellValue, item.images)
 }
 
 export default formatTableCell

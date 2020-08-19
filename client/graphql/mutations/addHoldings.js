@@ -8,22 +8,20 @@ const addHoldingsMutation = gql`
       asset {
         name
         popularity
-        ... on Artist {
-          followers
-        }
+        followers
       }
     }
   }
 `
 
 export const addHoldings = () => {
-  const [holdAssets] = useMutation(addHoldingsMutation, { refetchQueries: [{ query: getHoldingsQuery }] })
+  const [addHoldingsHook] = useMutation(addHoldingsMutation, { refetchQueries: [{ query: getHoldingsQuery }] })
   return assets => {
     const assetIds = { artistIds: [], trackIds: [], albumIds: [] }
     for (const asset of assets) {
       const assetType = asset.__typename.toLowerCase() + 'Ids'
       assetIds[assetType].push(asset.id)
     }
-    return holdAssets({ variables: assetIds })
+    return addHoldingsHook({ variables: assetIds })
   }
 }

@@ -21,9 +21,14 @@ module.exports = async (parent, { albumIds }, req) => {
 
   const assets = await Promise.all([getTracks(parent, { trackIds }, req), getArtists(parent, { artistIds }, req)])
 
-  return albums.map(album => ({
-    ...album,
-    tracks: assets[0].splice(0, album.tracks.items.length),
-    artists: assets[1].splice(0, album.artists.length)
-  }))
+  return albums.map(album => {
+    const artists = assets[1].splice(0, album.artists.length)
+    const tracks = assets[0].splice(0, album.tracks.items.length)
+    return {
+      ...album,
+      artists,
+      tracks,
+      followers: artists.reduce((p, c) => ({ followers: p.followers + c.followers })).followers
+    }
+  })
 }

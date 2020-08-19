@@ -4,27 +4,28 @@ export const getHoldingsQuery = gql`
   query {
     getHoldings {
       id
+      name
+      images {
+        url
+      }
+      type
       spotifyId
-      createdAt
+      held
       popularity
       followers
       performance
       asset {
         name
         popularity
-        ... on Artist {
-          followers
-        }
+        followers
         images {
           url
         }
       }
-      destroyedAt
+      dropped
       value {
         popularity
-        ... on Artist {
-          followers
-        }
+        followers
         images {
           url
         }

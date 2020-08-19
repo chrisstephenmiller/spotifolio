@@ -17,26 +17,31 @@ module.exports = gql`
 
   type Mutation {
     addHoldings(artistIds: [String] = [], trackIds: [String] = [], albumIds: [String] = []): [Holding]
+    dropHoldings(holdingIds: [Int] = []): [Holding]
   }
 
   type Holding {
     id: Int!
+    type: String!
+    name: String!
     userId: Int!
     spotifyId: String!
     asset: Asset!
-    createdAt: String!
+    held: String!
     value: Asset
-    destroyedAt: String
+    dropped: String
     popularity: Float!
     followers: Float!
     performance: Float!
+    images: [Image]!
   }
 
   interface Asset {
     id: String!
     name: String!
     popularity: Int!
-    images: [Image]
+    images: [Image]!
+    followers: Int!
   }
 
   type Artist implements Asset {
@@ -55,6 +60,7 @@ module.exports = gql`
     popularity: Int!
     artists: [Artist]!
     album: TrackAlbum!
+    followers: Int!
   }
 
   type Album implements Asset {
@@ -65,6 +71,7 @@ module.exports = gql`
     genres: [String]!
     images: [Image]!
     tracks: [Track]!
+    followers: Int!
   }
 
   type TrackAlbum {
@@ -90,7 +97,7 @@ module.exports = gql`
     name: String!
     id: String!
     description: String!
-    images: [Image]
+    images: [Image]!
     total: Int!
     public: Boolean!
   }

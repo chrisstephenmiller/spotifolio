@@ -6,32 +6,35 @@ const getAssetQueryVariables = holdings => {
   const variables = { artistIds: [], trackIds: [], albumIds: [] }
   holdings.forEach(holding => {
     const { asset, spotifyId, value } = holding
-    const assetType = asset.tracks ? 'album' : asset.genres ? 'artist' : 'track'
-    if (!value) variables[assetType + 'Ids'].push(spotifyId)
+    holding.type = asset.tracks ? 'Album' : asset.genres ? 'Artist' : 'Track'
+    if (!value) variables[holding.type.toLowerCase() + 'Ids'].push(spotifyId)
   })
   return variables
 }
 
 const calcChange = (a, v) => Math.ceil(10000 * ((v - a) / a)) / 100
-const calcFollowers = asset =>
-  !asset.artists
-    ? asset.followers
-    : asset.artists.reduce((p, c) => ({ followers: p.followers + c.followers })).followers
 
-const holdingsWithAssetsAndValues = (holdings, assets) => {
-  const assetDict = Object.fromEntries(assets.map(asset => [asset.id, asset]))
+const holdingsWithAssetsAndValues = (holdings, values) => {
+  const valuesDict = Object.fromEntries(values.map(value => [value.id, value]))
   for (const holding of holdings) {
-    holding.value = holding.value || assetDict[holding.spotifyId]
+    const { asset, createdAt, destroyedAt } = holding
+    holding.name = asset.name
+    holding.images = asset.images
+    holding.value = holding.value || valuesDict[holding.spotifyId]
     holding.popularity = calcChange(holding.asset.popularity, holding.value.popularity)
-    holding.followers = calcChange(calcFollowers(holding.asset), calcFollowers(holding.value))
-    holding.performance = (holding.popularity + holding.followers).toFixed(2)
+    holding.followers = calcChange(asset.followers, holding.value.followers)
+    holding.performance = (holding.popularity * 0.5 + holding.followers * 0.5).toFixed(2)
+    holding.held = createdAt
+    holding.dropped = destroyedAt
   }
   return holdings
 }
 
-module.exports = async (parent, args, req) => {
+module.exports = async (parent, { holdingIds }, req) => {
   const userId = req.user.id
-  const holdings = await Holding.findAll({ where: { userId }, raw: true })
+  const holdings = holdingIds
+    ? await Promise.all(holdingIds.map(holdingId => Holding.findByPk(holdingId)))
+    : await Holding.findAll({ where: { userId }, raw: true })
   const variables = getAssetQueryVariables(holdings)
   const assets = await getAssets(parent, variables, req)
   return holdingsWithAssetsAndValues(holdings, assets)

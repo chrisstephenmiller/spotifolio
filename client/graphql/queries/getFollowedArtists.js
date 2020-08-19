@@ -1,6 +1,6 @@
 import { useQuery, gql } from '@apollo/client'
 
-const getFollowedArtistsQuery = gql`
+export const getFollowedArtistsQuery = gql`
   query {
     getFollowedArtists {
       id

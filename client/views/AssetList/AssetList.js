@@ -11,23 +11,18 @@ const useStyles = makeStyles(theme => ({
 
 const assetTableConfig = {
   labels: [
-    {
-      name: 'Name',
-      imageUrl: asset => asset.images.slice(-1)[0].url,
-      direction: 'asc',
-      format: 'avatar'
-    },
+    { name: 'Name', direction: 'asc', format: 'avatar' },
     { name: 'Popularity' },
     { name: 'Followers' },
-    { name: 'Bought', format: 'date' }
+    { name: 'Held', format: 'date' }
   ],
   button: { text: 'Hold Assets' }
 }
 
 const addHoldingInfoToAssets = (assets, holdings) => {
-  const currentHoldings = holdings.filter(holding => !holding.destroyedAt)
+  const currentHoldings = holdings.filter(holding => !holding.dropped)
   const holdingsDict = Object.fromEntries(currentHoldings.map(holding => [holding.spotifyId, holding]))
-  return assets.map(asset => (holdingsDict[asset.id] ? { ...asset, bought: holdingsDict[asset.id].createdAt } : asset))
+  return assets.map(asset => (holdingsDict[asset.id] ? { ...asset, held: holdingsDict[asset.id].held } : asset))
 }
 
 const AssetList = () => {

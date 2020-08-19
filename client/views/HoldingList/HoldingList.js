@@ -1,46 +1,37 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { makeStyles } from '@material-ui/styles'
 import { ItemTable } from '../components'
-import { getHoldings } from 'gqlRequests'
+import { getHoldings, dropHoldings } from 'gqlRequests'
 
-const holdTableConfig = {
-  labels: [
-    {
-      name: 'Name',
-      value: holding => holding.asset.name,
-      imageUrl: holding => holding.asset.images.slice(-1)[0].url,
-      direction: 'asc',
-      format: 'avatar'
-    },
-    { name: 'Performance', format: 'percent' },
-    { name: 'Popularity', format: 'percent' },
-    { name: 'Followers', format: 'percent' },
-    { name: 'Type', value: holding => holding.asset.__typename, direction: 'asc' },
-    { name: 'Bought', value: holding => holding.createdAt, format: 'date' },
-    { name: 'Sold', value: holding => holding.destroyedAt, format: 'date' }
-  ]
-}
 const useStyles = makeStyles(theme => ({
   root: {
     padding: theme.spacing(3)
   }
 }))
 
+const holdingTableConfig = {
+  labels: [
+    { name: 'Name', direction: 'asc', format: 'avatar' },
+    { name: 'Performance', format: 'percent' },
+    { name: 'Popularity', format: 'percent' },
+    { name: 'Followers', format: 'percent' },
+    { name: 'Type', direction: 'asc' },
+    { name: 'Held', format: 'date' },
+    { name: 'Dropped', format: 'date' }
+  ],
+  button: { text: 'Drop Holdings', handler: '' }
+}
+
 const HoldingList = () => {
   const classes = useStyles()
   const holdings = getHoldings()
 
-  const [selectedItems, setSelectedItems] = useState([])
+  holdingTableConfig.button.handler = dropHoldings()
 
   return (
     <div className={classes.root}>
       <div>
-        <ItemTable
-          items={holdings}
-          itemTableConfig={holdTableConfig}
-          selectedItems={selectedItems}
-          setSelectedItems={setSelectedItems}
-        />
+        <ItemTable items={holdings} itemTableConfig={holdingTableConfig} />
       </div>
     </div>
   )
