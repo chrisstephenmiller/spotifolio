@@ -11,11 +11,18 @@ const getAssetIds = holdings => {
   return assetIds
 }
 
-const dropHoldingsWithValues = (holdings, values) => {
+const staticHolding = ({ asset, value }) => {
+  const performance = asset.performance === value.performance
+  const popularity = asset.popularity === value.popularity
+  const followers = asset.followers === value.followers
+  return performance && popularity && followers
+}
+
+const dropHoldingsWithValue = (holdings, values) => {
   holdings.forEach((holding, index) => {
     holding.value = values[index]
     holding.destroyedAt = Date.now()
-    holding.save()
+    staticHolding(holding) ? holding.destroy() : holding.save()
   })
 }
 
@@ -23,6 +30,6 @@ module.exports = async (parent, { holdingIds }, req) => {
   const holdingsToDrop = await Promise.all(holdingIds.map(holdingId => Holding.findByPk(holdingId)))
   const assetIds = getAssetIds(holdingsToDrop)
   const valuesForHoldings = await getAssets(parent, assetIds, req)
-  dropHoldingsWithValues(holdingsToDrop, valuesForHoldings)
+  dropHoldingsWithValue(holdingsToDrop, valuesForHoldings)
   return holdingsToDrop
 }
