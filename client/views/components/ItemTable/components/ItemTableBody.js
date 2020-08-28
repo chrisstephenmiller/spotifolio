@@ -13,6 +13,7 @@ const ItemTableBody = props => {
             <TableCell padding="checkbox">
               <Checkbox
                 checked={item.selected}
+                disabled={!item.selectable}
                 color="primary"
                 onChange={event => handleSelectOne(event, item)}
                 value="true"

@@ -36,9 +36,8 @@ const cellFormats = {
 
 const formatTableCell = (item, cellConfig) => {
   const { name, format } = cellConfig
-  const cellValue = item[name.toLowerCase()]
   const cellFormat = cellFormats[format || 'default']
-  return cellFormat(cellValue, item.images)
+  return cellFormat(item[name], item.images)
 }
 
 export default formatTableCell

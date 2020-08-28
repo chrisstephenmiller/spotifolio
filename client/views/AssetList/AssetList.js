@@ -11,33 +11,40 @@ const useStyles = makeStyles(theme => ({
 
 const assetTableConfig = {
   labels: [
-    { name: 'Name', direction: 'asc', format: 'avatar' },
-    { name: 'Popularity' },
-    { name: 'Followers' },
-    { name: 'Held', format: 'date' }
-  ],
-  button: { text: 'Hold Assets' }
+    { name: 'name', direction: 'asc', format: 'avatar' },
+    { name: 'popularity' },
+    { name: 'followers' },
+    { name: 'held', format: 'date' }
+  ]
 }
 
+const assetToolbarConfig = () => ({
+  button: { text: 'hold assets', handler: addHoldings() },
+  checkbox: { text: 'show held', filter: 'held' }
+})
+
 const addHoldingInfoToAssets = (assets, holdings) => {
-  const currentHoldings = holdings.filter(holding => !holding.dropped)
-  const holdingsDict = Object.fromEntries(currentHoldings.map(holding => [holding.spotifyId, holding]))
-  return assets.map(asset => (holdingsDict[asset.id] ? { ...asset, held: holdingsDict[asset.id].held } : asset))
+  const heldHoldings = holdings.filter(holding => !holding.dropped)
+  const holdingsDict = Object.fromEntries(heldHoldings.map(holding => [holding.spotifyId, holding]))
+  const heldAsset = asset => (holdingsDict[asset.id] ? +holdingsDict[asset.id].held : null)
+  return assets.map(asset => ({ ...asset, held: heldAsset(asset) }))
 }
 
 const AssetList = () => {
   const classes = useStyles()
 
   const holdings = getHoldings()
-  const artists = getFollowedArtists()
-  const artistsWithHoldingInfo = addHoldingInfoToAssets(artists, holdings)
-
-  assetTableConfig.button.handler = addHoldings()
+  const assets = getFollowedArtists()
+  const assetsWithHoldingInfo = addHoldingInfoToAssets(assets, holdings)
 
   return (
     <div className={classes.root}>
       <div>
-        <ItemTable items={artistsWithHoldingInfo} itemTableConfig={assetTableConfig} />
+        <ItemTable
+          items={assetsWithHoldingInfo}
+          itemTableConfig={assetTableConfig}
+          itemToolbarConfig={assetToolbarConfig()}
+        />
       </div>
     </div>
   )

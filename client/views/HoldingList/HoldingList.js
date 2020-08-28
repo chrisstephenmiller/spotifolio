@@ -9,29 +9,31 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const holdingTableConfig = {
+const itemTableConfig = {
   labels: [
-    { name: 'Name', direction: 'asc', format: 'avatar' },
-    { name: 'Performance', format: 'percent' },
-    { name: 'Popularity', format: 'percent' },
-    { name: 'Followers', format: 'percent' },
-    { name: 'Type', direction: 'asc' },
-    { name: 'Held', format: 'date' },
-    { name: 'Dropped', format: 'date' }
-  ],
-  button: { text: 'Drop Holdings', handler: '' }
+    { name: 'name', direction: 'asc', format: 'avatar' },
+    { name: 'performance', format: 'percent' },
+    { name: 'popularity', format: 'percent' },
+    { name: 'followers', format: 'percent' },
+    { name: 'type', direction: 'asc' },
+    { name: 'held', format: 'date' },
+    { name: 'dropped', format: 'date' }
+  ]
 }
+
+const itemToolbarConfig = () => ({
+  button: { text: 'drop holdings', handler: dropHoldings() },
+  checkbox: { text: 'show dropped', filter: 'dropped' }
+})
 
 const HoldingList = () => {
   const classes = useStyles()
   const holdings = getHoldings()
 
-  holdingTableConfig.button.handler = dropHoldings()
-
   return (
     <div className={classes.root}>
       <div>
-        <ItemTable items={holdings} itemTableConfig={holdingTableConfig} />
+        <ItemTable items={holdings} itemTableConfig={itemTableConfig} itemToolbarConfig={itemToolbarConfig()} />
       </div>
     </div>
   )

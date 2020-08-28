@@ -8,8 +8,8 @@ const ItemTableHead = props => {
     selectedSortLabel,
     setSortDirection,
     selectedSortDirection,
-    handleSelectAll,
-    allSelected,
+    handleSelectPage,
+    pageSelected,
     someSelected
   } = props
 
@@ -17,7 +17,7 @@ const ItemTableHead = props => {
     return () => {
       const reverse = selectedSortDirection === 'asc' ? 'desc' : 'asc'
       const { name, direction } = label
-      selectedSortLabel === name ? setSortDirection(reverse) : setSortDirection(direction || 'desc')
+      setSortDirection(selectedSortLabel === name ? reverse : direction || 'desc')
       setSortLabel(name)
     }
   }
@@ -28,6 +28,7 @@ const ItemTableHead = props => {
         active={selectedSortLabel === label.name}
         direction={selectedSortDirection}
         onClick={handleSetSortLabel(label)}
+        style={{ textTransform: 'capitalize' }}
       >
         {label.name}
       </TableSortLabel>
@@ -38,7 +39,7 @@ const ItemTableHead = props => {
     <TableHead>
       <TableRow>
         <TableCell padding="checkbox">
-          <Checkbox color="primary" checked={allSelected} indeterminate={someSelected} onChange={handleSelectAll} />
+          <Checkbox color="primary" checked={pageSelected} indeterminate={someSelected} onChange={handleSelectPage} />
         </TableCell>
         {itemTableConfig.labels.map(label => {
           return (

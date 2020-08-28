@@ -18,16 +18,30 @@ const useStyles = makeStyles(() => ({
 }))
 
 const ItemTable = props => {
-  const { items, itemTableConfig } = props
+  const { items, itemTableConfig, itemToolbarConfig } = props
 
   const classes = useStyles()
 
+  const [filterCheckbox, setFilterCheckbox] = useState(false)
   const [selectedItems, setSelectedItems] = useState([])
+  const [selectedSortLabel, setSortLabel] = useState('name')
+  const [selectedSortDirection, setSortDirection] = useState('asc')
+  const [rowsPerPage, setRowsPerPage] = useState(10)
+  const [page, setPage] = useState(0)
 
-  const handleSelectAll = event => {
-    const allSelectedItems = event.target.checked ? [...items] : []
-    setSelectedItems(allSelectedItems)
+  const makeTableItems = () => {
+    const selectableItems = items.map(item => ({
+      ...item,
+      selectable: !item[itemToolbarConfig.checkbox.filter],
+      selected: selectedItems.some(sI => sI.id === item.id)
+    }))
+    const filteredItems = filterCheckbox ? selectableItems : selectableItems.filter(item => item.selectable)
+    const ascOrDesc = selectedSortDirection === 'asc' ? 1 : -1
+    const sortFunction = (a, b) => (a[selectedSortLabel] > b[selectedSortLabel] ? ascOrDesc : -ascOrDesc)
+    return filteredItems.sort(sortFunction).slice(page * rowsPerPage, (page + 1) * rowsPerPage)
   }
+
+  const tableItems = makeTableItems()
 
   const handleSelectOne = (event, item) => {
     const selectedIndex = selectedItems.map(selectedItem => selectedItem.id).indexOf(item.id)
@@ -35,29 +49,26 @@ const ItemTable = props => {
     setSelectedItems([...selectedItems])
   }
 
-  const [rowsPerPage, setRowsPerPage] = useState(10)
-  const [page, setPage] = useState(0)
-
-  const [selectedSortLabel, setSortLabel] = useState('Name')
-  const [selectedSortDirection, setSortDirection] = useState('asc')
-
-  const sortAndPaginateItems = () => {
-    const selectedLabelData = itemTableConfig.labels.find(label => label.name === selectedSortLabel)
-    const defaultSortValue = item => item[selectedLabelData.name.toLowerCase()]
-    const sortValue = selectedLabelData.value || defaultSortValue
-    const ascOrDesc = selectedSortDirection === 'asc' ? 1 : -1
-    const sortFunction = (a, b) => (sortValue(a) > sortValue(b) ? ascOrDesc : -ascOrDesc)
-    const itemSelected = item => ({ ...item, selected: selectedItems.some(i => i.id === item.id) })
-    const itemsSelected = items.map(itemSelected)
-    const onePage = [page * rowsPerPage, (page + 1) * rowsPerPage]
-    return itemsSelected.sort(sortFunction).slice(...onePage)
+  const handleSelectPage = event => {
+    const selectedIndex = item => selectedItems.map(selectedItem => selectedItem.id).indexOf(item.id)
+    const addItem = item => item.selectable && selectedIndex(item) < 0 && selectedItems.push(item)
+    const removeItem = item => selectedItems.splice(selectedIndex(item), 1)
+    tableItems.forEach(event.target.checked ? addItem : removeItem)
+    setSelectedItems([...selectedItems])
   }
 
-  const tableItems = sortAndPaginateItems()
+  const pageSelected = !!tableItems.length && tableItems.every(item => item.selected)
+  const someSelected = !pageSelected && !!selectedItems.length
 
   return (
     <div>
-      <ItemTableToolbar buttonConfig={itemTableConfig.button} selectedItems={selectedItems} />
+      <ItemTableToolbar
+        itemToolbarConfig={itemToolbarConfig}
+        selectedItems={selectedItems}
+        setSelectedItems={setSelectedItems}
+        filterCheckbox={filterCheckbox}
+        setFilterCheckbox={setFilterCheckbox}
+      />
       <Card>
         <CardContent className={classes.content}>
           <PerfectScrollbar>
@@ -69,9 +80,9 @@ const ItemTable = props => {
                   setSortLabel={setSortLabel}
                   selectedSortDirection={selectedSortDirection}
                   setSortDirection={setSortDirection}
-                  allSelected={!!selectedItems.length && selectedItems.length === items.length}
-                  someSelected={!!selectedItems.length && selectedItems.length !== items.length}
-                  handleSelectAll={handleSelectAll}
+                  pageSelected={pageSelected}
+                  someSelected={someSelected}
+                  handleSelectPage={handleSelectPage}
                 />
                 <ItemTableBody
                   itemTableConfig={itemTableConfig}
