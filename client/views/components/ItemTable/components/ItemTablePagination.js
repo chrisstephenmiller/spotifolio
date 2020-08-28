@@ -1,9 +1,7 @@
 import React from 'react'
 import { TablePagination } from '@material-ui/core'
 
-const ItemTablePagination = props => {
-  const { count, page, rowsPerPage, setPage, setRowsPerPage } = props
-
+const ItemTablePagination = ({ count, page, rowsPerPage, setPage, setRowsPerPage }) => {
   const handlePageChange = (event, currentPage) => {
     setPage(currentPage)
   }

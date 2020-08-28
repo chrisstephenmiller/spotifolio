@@ -23,9 +23,7 @@ const useStyles = makeStyles(theme => ({
 
 import { useAuth } from '../../../../auth'
 
-const Topbar = props => {
-  const { onSidebarOpen } = props
-
+const Topbar = ({ onSidebarOpen }) => {
   const classes = useStyles()
 
   const [notifications] = useState([])

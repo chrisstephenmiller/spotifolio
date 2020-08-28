@@ -17,9 +17,7 @@ const useStyles = makeStyles(() => ({
   }
 }))
 
-const ItemTable = props => {
-  const { items, itemTableConfig, itemToolbarConfig } = props
-
+const ItemTable = ({ items, itemTableConfig, itemToolbarConfig }) => {
   const classes = useStyles()
 
   const [filterCheckbox, setFilterCheckbox] = useState(false)

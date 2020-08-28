@@ -1,9 +1,7 @@
 import React from 'react'
 import { Route } from 'react-router-dom'
 
-const RouteWithLayout = props => {
-  const { layout: Layout, component: Component, ...rest } = props
-
+const RouteWithLayout = ({ layout: Layout, component: Component, ...rest }) => {
   return (
     <Route
       {...rest}

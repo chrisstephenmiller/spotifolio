@@ -2,9 +2,7 @@ import React from 'react'
 import { Checkbox, TableBody, TableCell, TableRow } from '@material-ui/core'
 import formatTableCell from './ItemTableCells'
 
-const ItemTableBody = props => {
-  const { itemTableConfig, tableItems, handleSelectOne } = props
-
+const ItemTableBody = ({ itemTableConfig, tableItems, handleSelectOne }) => {
   return (
     <TableBody>
       {tableItems.map(item => {

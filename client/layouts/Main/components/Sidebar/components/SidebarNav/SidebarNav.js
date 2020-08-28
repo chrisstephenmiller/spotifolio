@@ -44,9 +44,7 @@ const CustomRouterLink = forwardRef((props, ref) => (
   </div>
 ))
 
-const SidebarNav = props => {
-  const { pages, className } = props
-
+const SidebarNav = ({ pages, className }) => {
   const classes = useStyles()
 
   return (

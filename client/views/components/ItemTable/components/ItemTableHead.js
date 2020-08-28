@@ -1,22 +1,19 @@
 import React from 'react'
 import { Checkbox, TableCell, TableHead, TableRow, TableSortLabel } from '@material-ui/core'
 
-const ItemTableHead = props => {
-  const {
-    itemTableConfig,
-    setSortLabel,
-    selectedSortLabel,
-    setSortDirection,
-    selectedSortDirection,
-    handleSelectPage,
-    pageSelected,
-    someSelected
-  } = props
-
-  const handleSetSortLabel = label => {
+const ItemTableHead = ({
+  itemTableConfig,
+  setSortLabel,
+  selectedSortLabel,
+  setSortDirection,
+  selectedSortDirection,
+  handleSelectPage,
+  pageSelected,
+  someSelected
+}) => {
+  const handleSetSortLabel = ({ name, direction }) => {
     return () => {
       const reverse = selectedSortDirection === 'asc' ? 'desc' : 'asc'
-      const { name, direction } = label
       setSortDirection(selectedSortLabel === name ? reverse : direction || 'desc')
       setSortLabel(name)
     }

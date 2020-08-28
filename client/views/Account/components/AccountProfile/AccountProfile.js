@@ -16,9 +16,7 @@ const useStyles = makeStyles(() => ({
   }
 }))
 
-const AccountProfile = props => {
-  const { profile } = props
-
+const AccountProfile = ({ profile }) => {
   const classes = useStyles()
 
   const ProfileInfo = ({ children }) => (

@@ -13,9 +13,7 @@ const useStyles = makeStyles(() => ({
   }
 }))
 
-const Minimal = props => {
-  const { children } = props
-
+const Minimal = ({ children }) => {
   const classes = useStyles()
 
   return (

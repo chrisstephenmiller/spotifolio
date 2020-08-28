@@ -30,9 +30,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const Sidebar = props => {
-  const { open, variant, onClose } = props
-
+const Sidebar = ({ open, variant, onClose }) => {
   const classes = useStyles()
 
   const pages = [
