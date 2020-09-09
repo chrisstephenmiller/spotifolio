@@ -17,29 +17,37 @@ const useStyles = makeStyles(() => ({
   }
 }))
 
-const ItemTable = ({ items, itemTableConfig, itemToolbarConfig }) => {
+const ItemTable = ({ getItems, itemTableConfig, itemToolbarConfig }) => {
   const classes = useStyles()
 
-  const [filterCheckbox, setFilterCheckbox] = useState(false)
+  const [typeFilters, setTypeFilters] = useState({ Artist: true, Track: true, Album: true })
+  const [selectableCheckbox, setSelectableCheckbox] = useState(false)
   const [selectedItems, setSelectedItems] = useState([])
   const [selectedSortLabel, setSortLabel] = useState('name')
   const [selectedSortDirection, setSortDirection] = useState('asc')
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [page, setPage] = useState(0)
 
+  const items = getItems()
+
   const makeTableItems = () => {
-    const selectableItems = items.map(item => ({
+    const { typeFilter, selectable } = itemToolbarConfig
+    const mapItems = item => ({
       ...item,
-      selectable: !item[itemToolbarConfig.checkbox.filter],
-      selected: selectedItems.some(sI => sI.id === item.id)
-    }))
-    const filteredItems = filterCheckbox ? selectableItems : selectableItems.filter(item => item.selectable)
+      selectable: !item[selectable.filter],
+      selected: selectedItems.some(selectedItem => selectedItem.id === item.id)
+    })
+    const filterItems = item => typeFilters[item[typeFilter]] && (selectableCheckbox ? item : item.selectable)
     const ascOrDesc = selectedSortDirection === 'asc' ? 1 : -1
-    const sortFunction = (a, b) => (a[selectedSortLabel] > b[selectedSortLabel] ? ascOrDesc : -ascOrDesc)
-    return filteredItems.sort(sortFunction).slice(page * rowsPerPage, (page + 1) * rowsPerPage)
+    const sortItems = (a, b) => (a[selectedSortLabel] > b[selectedSortLabel] ? ascOrDesc : -ascOrDesc)
+    return items
+      .map(mapItems)
+      .filter(filterItems)
+      .sort(sortItems)
   }
 
   const tableItems = makeTableItems()
+  const tableItemsPage = tableItems.slice(page * rowsPerPage, (page + 1) * rowsPerPage)
 
   const handleSelectOne = (event, item) => {
     const selectedIndex = selectedItems.map(selectedItem => selectedItem.id).indexOf(item.id)
@@ -51,11 +59,11 @@ const ItemTable = ({ items, itemTableConfig, itemToolbarConfig }) => {
     const selectedIndex = item => selectedItems.map(selectedItem => selectedItem.id).indexOf(item.id)
     const addItem = item => item.selectable && selectedIndex(item) < 0 && selectedItems.push(item)
     const removeItem = item => selectedItems.splice(selectedIndex(item), 1)
-    tableItems.forEach(event.target.checked ? addItem : removeItem)
+    tableItemsPage.filter(item => item.selectable).forEach(event.target.checked ? addItem : removeItem)
     setSelectedItems([...selectedItems])
   }
 
-  const pageSelected = !!tableItems.length && tableItems.every(item => item.selected)
+  const pageSelected = !!tableItemsPage.length && tableItemsPage.every(item => item.selected || !item.selectable)
   const someSelected = !pageSelected && !!selectedItems.length
 
   return (
@@ -64,8 +72,10 @@ const ItemTable = ({ items, itemTableConfig, itemToolbarConfig }) => {
         itemToolbarConfig={itemToolbarConfig}
         selectedItems={selectedItems}
         setSelectedItems={setSelectedItems}
-        filterCheckbox={filterCheckbox}
-        setFilterCheckbox={setFilterCheckbox}
+        selectableCheckbox={selectableCheckbox}
+        setSelectableCheckbox={setSelectableCheckbox}
+        typeFilters={typeFilters}
+        setTypeFilters={setTypeFilters}
       />
       <Card>
         <CardContent className={classes.content}>
@@ -84,7 +94,7 @@ const ItemTable = ({ items, itemTableConfig, itemToolbarConfig }) => {
                 />
                 <ItemTableBody
                   itemTableConfig={itemTableConfig}
-                  tableItems={tableItems}
+                  tableItems={tableItemsPage}
                   handleSelectOne={handleSelectOne}
                 />
               </Table>
@@ -93,7 +103,7 @@ const ItemTable = ({ items, itemTableConfig, itemToolbarConfig }) => {
         </CardContent>
         <CardActions className={classes.actions}>
           <ItemTablePagination
-            count={items.length}
+            count={tableItems.length}
             page={page}
             setPage={setPage}
             rowsPerPage={rowsPerPage}

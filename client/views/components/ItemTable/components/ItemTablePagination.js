@@ -19,7 +19,7 @@ const ItemTablePagination = ({ count, page, rowsPerPage, setPage, setRowsPerPage
       onChangePage={handlePageChange}
       rowsPerPage={rowsPerPage}
       onChangeRowsPerPage={handleRowsPerPageChange}
-      rowsPerPageOptions={[5, 10, 25]}
+      rowsPerPageOptions={[5, 10, 25, 50]}
     />
   )
 }

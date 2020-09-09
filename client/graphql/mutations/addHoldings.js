@@ -5,11 +5,6 @@ const addHoldingsMutation = gql`
   mutation($artistIds: [String] = [], $trackIds: [String] = [], $albumIds: [String] = []) {
     addHoldings(artistIds: $artistIds, trackIds: $trackIds, albumIds: $albumIds) {
       spotifyId
-      asset {
-        name
-        popularity
-        followers
-      }
     }
   }
 `

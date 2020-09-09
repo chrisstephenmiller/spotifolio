@@ -1,7 +1,7 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/styles'
 import { ItemTable } from '../components'
-import { getFollowedArtists, getHoldings, addHoldings } from 'gqlRequests'
+import { getFollowedArtists, getSavedTracks, getSavedAlbums, getHoldings, addHoldings } from 'gqlRequests'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -12,18 +12,22 @@ const useStyles = makeStyles(theme => ({
 const assetTableConfig = {
   labels: [
     { name: 'name', direction: 'asc', format: 'avatar' },
-    { name: 'popularity' },
     { name: 'followers' },
+    { name: 'popularity' },
+    { name: 'type', value: '__typename' },
     { name: 'held', format: 'date' }
   ]
 }
 
 const assetToolbarConfig = () => ({
   button: { text: 'hold assets', handler: addHoldings() },
-  checkbox: { text: 'show held', filter: 'held' }
+  selectable: { text: 'show held', filter: 'held' },
+  typeFilter: '__typename'
 })
 
-const addHoldingInfoToAssets = (assets, holdings) => {
+const getAssetsWithHoldingInfo = () => {
+  const holdings = getHoldings()
+  const assets = [...getFollowedArtists(), ...getSavedTracks(), ...getSavedAlbums()]
   const heldHoldings = holdings.filter(holding => !holding.dropped)
   const holdingsDict = Object.fromEntries(heldHoldings.map(holding => [holding.spotifyId, holding]))
   const heldAsset = asset => (holdingsDict[asset.id] ? +holdingsDict[asset.id].held : null)
@@ -33,15 +37,11 @@ const addHoldingInfoToAssets = (assets, holdings) => {
 const AssetList = () => {
   const classes = useStyles()
 
-  const holdings = getHoldings()
-  const assets = getFollowedArtists()
-  const assetsWithHoldingInfo = addHoldingInfoToAssets(assets, holdings)
-
   return (
     <div className={classes.root}>
       <div>
         <ItemTable
-          items={assetsWithHoldingInfo}
+          getItems={getAssetsWithHoldingInfo}
           itemTableConfig={assetTableConfig}
           itemToolbarConfig={assetToolbarConfig()}
         />

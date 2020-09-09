@@ -18,12 +18,12 @@ const holdingsWithAssetsAndValues = (holdings, values) => {
   const valuesDict = Object.fromEntries(values.map(value => [value.id, value]))
   for (const holding of holdings) {
     const { asset, createdAt, destroyedAt } = holding
+    const value = holding.value || valuesDict[holding.spotifyId]
     holding.name = asset.name
     holding.images = asset.images
-    holding.value = holding.value || valuesDict[holding.spotifyId]
-    holding.popularity = calcChange(holding.asset.popularity, holding.value.popularity)
-    holding.followers = calcChange(asset.followers, holding.value.followers)
-    holding.performance = (holding.popularity * 0.5 + holding.followers * 0.5).toFixed(2)
+    holding.popularity = calcChange(asset.popularity, value.popularity)
+    holding.followers = calcChange(asset.followers, value.followers)
+    holding.performance = +(holding.popularity * 0.5 + holding.followers * 0.5).toFixed(2)
     holding.held = createdAt
     holding.dropped = destroyedAt
   }

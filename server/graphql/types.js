@@ -26,9 +26,7 @@ module.exports = gql`
     name: String!
     userId: Int!
     spotifyId: String!
-    asset: Asset!
     held: String!
-    value: Asset
     dropped: String
     popularity: Float!
     followers: Float!

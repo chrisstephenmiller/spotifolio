@@ -34,9 +34,9 @@ const cellFormats = {
   default: Default
 }
 
-const formatTableCell = (item, { name, format }) => {
+const formatTableCell = (item, { name, value, format }) => {
   const cellFormat = cellFormats[format || 'default']
-  return cellFormat(item[name], item.images)
+  return cellFormat(item[value] || item[name], item.images)
 }
 
 export default formatTableCell

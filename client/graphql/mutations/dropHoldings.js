@@ -5,11 +5,6 @@ const dropHoldingsMutation = gql`
   mutation($holdingIds: [Int] = []) {
     dropHoldings(holdingIds: $holdingIds) {
       spotifyId
-      asset {
-        name
-        popularity
-        followers
-      }
     }
   }
 `

@@ -1,3 +1,5 @@
 export { getProfile } from './getProfile'
 export { getHoldings, getHoldingsQuery } from './getHoldings'
-export { getFollowedArtists, getFollowedArtistsQuery } from './getFollowedArtists'
+export { getSavedTracks } from './getSavedTracks'
+export { getSavedAlbums } from './getSavedAlbums'
+export { getFollowedArtists } from './getFollowedArtists'

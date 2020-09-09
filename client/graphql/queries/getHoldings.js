@@ -14,22 +14,7 @@ export const getHoldingsQuery = gql`
       popularity
       followers
       performance
-      asset {
-        name
-        popularity
-        followers
-        images {
-          url
-        }
-      }
       dropped
-      value {
-        popularity
-        followers
-        images {
-          url
-        }
-      }
     }
   }
 `

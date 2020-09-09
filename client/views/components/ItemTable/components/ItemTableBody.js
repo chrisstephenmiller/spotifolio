@@ -14,7 +14,6 @@ const ItemTableBody = ({ itemTableConfig, tableItems, handleSelectOne }) => {
                 disabled={!item.selectable}
                 color="primary"
                 onChange={event => handleSelectOne(event, item)}
-                value="true"
               />
             </TableCell>
             {itemTableConfig.labels.map(label => (
