@@ -17,7 +17,7 @@ const useStyles = makeStyles(() => ({
   }
 }))
 
-const ItemTable = ({ getItems, itemTableConfig, itemToolbarConfig }) => {
+const ItemTable = ({ items, itemTableConfig, itemToolbarConfig }) => {
   const classes = useStyles()
 
   const [typeFilters, setTypeFilters] = useState({ Artist: true, Track: true, Album: true })
@@ -27,8 +27,6 @@ const ItemTable = ({ getItems, itemTableConfig, itemToolbarConfig }) => {
   const [selectedSortDirection, setSortDirection] = useState('asc')
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [page, setPage] = useState(0)
-
-  const items = getItems()
 
   const makeTableItems = () => {
     const { typeFilter, selectable } = itemToolbarConfig

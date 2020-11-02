@@ -41,7 +41,7 @@ const AssetList = () => {
     <div className={classes.root}>
       <div>
         <ItemTable
-          getItems={getAssetsWithHoldingInfo}
+          items={getAssetsWithHoldingInfo()}
           itemTableConfig={assetTableConfig}
           itemToolbarConfig={assetToolbarConfig()}
         />

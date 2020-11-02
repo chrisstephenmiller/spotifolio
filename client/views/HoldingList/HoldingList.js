@@ -33,7 +33,7 @@ const HoldingList = () => {
   return (
     <div className={classes.root}>
       <div>
-        <ItemTable getItems={getHoldings} itemTableConfig={itemTableConfig} itemToolbarConfig={itemToolbarConfig()} />
+        <ItemTable items={getHoldings()} itemTableConfig={itemTableConfig} itemToolbarConfig={itemToolbarConfig()} />
       </div>
     </div>
   )
